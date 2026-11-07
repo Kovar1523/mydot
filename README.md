@@ -14,6 +14,7 @@ Arch Linux · X11 · dwm · ASUS FA608UM (AMD 780M + NVIDIA) 환경 스냅샷 (2
 | `system/boot-staged/` | Limine/콘솔 폰트 준비본 (아직 미적용) | `~/bootfont` |
 | `packages/pacman.txt` | 공식 저장소 명시 설치 패키지 | `pacman -Qqen` |
 | `packages/aur.txt` | AUR 패키지 | `pacman -Qqem` |
+| `packages/pipx.txt` | pipx 패키지 | `pipx list --short` |
 
 ## 주요 구성 요소
 
@@ -26,6 +27,36 @@ Arch Linux · X11 · dwm · ASUS FA608UM (AMD 780M + NVIDIA) 환경 스냅샷 (2
 - 색상: pywal16 (`~/.config/wal/apply.sh` + templates)
 - 입력기: fcitx5-hangul
 - 배경: xwinwrap + mpv (`usercustom/aurora-2240x1400.mp4`)
+
+## 색상 팔레트
+
+pywal16이 `home/Downloads/aurora-wallpaper.png`에서 뽑은 팔레트입니다.
+
+- 생성된 결과: `home/.cache/wal/` (`colors.json`, `sequences`, `colors-tty.sh`, `dunst.conf`, `colors-rofi.rasi`, `colors-polybar.ini`, `btopwal.theme` 등)
+- 템플릿과 적용 스크립트: `home/.config/wal/` (`apply.sh`, `templates/`, `colorschemes/dark/nord.json`)
+- tty 팔레트: `system/etc/issue` (`\e]P` escape)
+
+| 키 | 값 |
+|---|---|
+| background / color0 | `#0c161d` |
+| foreground / color7 / color15 | `#c2c4c6` |
+| color1 / 9 | `#128590` |
+| color2 / 10 | `#127ebb` |
+| color3 / 11 | `#0F9073` |
+| color4 / 12 | `#226eff` |
+| color5 / 13 | `#1379d6` |
+| color6 / 14 | `#0e7dc5` |
+| color8 | `#6c7984` |
+
+다시 생성하려면 `wal -i ~/Downloads/aurora-wallpaper.png` 후 `~/.config/wal/apply.sh`.
+
+## 셸
+
+- `home/.bashrc`: eza alias(`ls`/`ll`/`la`/`lt`), `EDITOR=nvim`, starship, fzf 색상, X 안에서 fastfetch
+- `home/.bash_profile`: tty1 로그인 시 fastfetch를 한 줄씩 출력한 뒤 `startx`
+- `home/.config/starship.toml`: 프롬프트
+- `home/.config/fastfetch/config.jsonc`: pfetch 스타일, 인라인 로고
+- `home/.config/eza/theme.yml`: eza 색상
 
 ## 복원
 
