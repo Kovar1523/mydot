@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/kovar1523/Downloads/aurora-wallpaper.png"
+let background = "#0c161d"
+let foreground = "#c2c4c6"
+let cursor     = "#c2c4c6"
+
+" Colors
+let color0  = "#0c161d"
+let color1  = "#128590"
+let color2  = "#127ebb"
+let color3  = "#0F9073"
+let color4  = "#226eff"
+let color5  = "#1379d6"
+let color6  = "#0e7dc5"
+let color7  = "#c2c4c6"
+let color8  = "#6c7984"
+let color9  = "#128590"
+let color10 = "#127ebb"
+let color11 = "#0F9073"
+let color12 = "#226eff"
+let color13 = "#1379d6"
+let color14 = "#0e7dc5"
+let color15 = "#c2c4c6"

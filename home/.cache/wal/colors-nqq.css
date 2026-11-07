@@ -1,0 +1,31 @@
+/*
+ *		pywal theme template for notepadqq by threadreaper
+ *		https://github.com/threadreaper
+ */
+
+.cm-s-nqqwal .CodeMirror-gutters { background: #0c161d !important; }
+.cm-s-nqqwal .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded { color: #c2c4c6; }
+.cm-s-nqqwal .CodeMirror-cursor { border-left: 1px solid #c2c4c6; background-color: rgba(14,125,197,0.4)}
+.cm-s-nqqwal { background-color: #0c161d; color: #c2c4c6; }
+.cm-s-nqqwal span.cm-builtin { color: #127ebb; font-weight: bold; }
+.cm-s-nqqwal span.cm-comment { color: #6c7984; }
+.cm-s-nqqwal span.cm-keyword { color: #0F9073; font-weight: bold; }
+.cm-s-nqqwal span.cm-atom { color: #226eff; }
+.cm-s-nqqwal span.cm-def { color: #1379d6; }
+.cm-s-nqqwal span.cm-variable { color: #0e7dc5; }
+.cm-s-nqqwal span.cm-variable-2 { color: #1379d6; }
+.cm-s-nqqwal span.cm-string { color: #127ebb; }
+.cm-s-nqqwal span.cm-string-2 { color: #127ebb; }
+.cm-s-nqqwal span.cm-number { color: #1379d6; }
+.cm-s-nqqwal span.cm-tag { color: #0F9073; }
+.cm-s-nqqwal span.cm-property { color: #0e7dc5; }
+.cm-s-nqqwal span.cm-attribute { color: #0e7dc5; }
+.cm-s-nqqwal span.cm-qualifier { color: #226eff; }
+.cm-s-nqqwal span.cm-meta { color: #1379d6; }
+.cm-s-nqqwal span.cm-header { color: #0F9073; }
+.cm-s-nqqwal span.cm-operator { color: #0F9073; }
+.cm-s-nqqwal span.CodeMirror-matchingbracket { box-sizing: border-box; background: transparent; border-bottom: 1px solid; }
+.cm-s-nqqwal span.CodeMirror-nonmatchingbracket { border-bottom: 1px solid; background: none; }
+.cm-s-nqqwal .CodeMirror-activeline-background { background: rgba(19,121,214,0.4); }
+.cm-s-nqqwal div.CodeMirror-selected { background: #0F9073; }
+.cm-s-nqqwal .CodeMirror-focused div.CodeMirror-selected { background: #0c161d); }

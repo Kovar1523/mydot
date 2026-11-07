@@ -1,0 +1,29 @@
+{
+    "checksum": "a9982dbfcf30a8ba7ff1ae3d8d2dc684",
+    "wallpaper": "/home/kovar1523/Downloads/aurora-wallpaper.png",
+    "alpha": "100",
+
+    "special": {
+        "background": "#0c161d",
+        "foreground": "#c2c4c6",
+        "cursor": "#c2c4c6"
+    },
+    "colors": {
+        "color0": "#0c161d",
+        "color1": "#128590",
+        "color2": "#127ebb",
+        "color3": "#0F9073",
+        "color4": "#226eff",
+        "color5": "#1379d6",
+        "color6": "#0e7dc5",
+        "color7": "#c2c4c6",
+        "color8": "#6c7984",
+        "color9": "#128590",
+        "color10": "#127ebb",
+        "color11": "#0F9073",
+        "color12": "#226eff",
+        "color13": "#1379d6",
+        "color14": "#0e7dc5",
+        "color15": "#c2c4c6"
+    }
+}
