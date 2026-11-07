@@ -1,0 +1,131 @@
+## Nord 팔레트 (https://www.nordtheme.com/docs/colors-and-palettes)
+## kanagawa-dragon.yazi 의 배치(사각 표시줄, 구분자 없음 등)를 그대로 두고 색만 Nord 로 옮김
+## yazi 26.9 기준 키 이름 사용 ([cmp], [help] chord/action, [confirm], [spot])
+## [filetype]·[icon] 은 flavor 안에서는 무시되므로 ~/.config/yazi/theme.toml 에 둠
+# nord0   "#2E3440" 배경
+# nord1   "#3B4252" 보조 배경 (탭·모드 보조 칸, 팝업 바탕)
+# nord3   "#4C566A"
+# muted   "#4C566A" 흐린 글자·구분선 (polybar 구분자와 같은 색)
+# nord4   "#D8DEE9" 기본 글자
+# nord6   "#ECEFF4"
+# nord7   "#8FBCBB"
+# nord8   "#88C0D0" 강조 (dwm 포커스 테두리·polybar 와 같은 색)
+# nord9   "#81A1C1" 팝업 테두리
+# nord11  "#BF616A" 빨강
+# nord12  "#D08770" 주황
+# nord13  "#EBCB8B" 노랑
+# nord14  "#A3BE8C" 초록
+# nord15  "#B48EAD" 보라
+
+[mgr]
+marker_copied = { fg = "#A3BE8C", bg = "#A3BE8C" }
+marker_cut = { fg = "#BF616A", bg = "#BF616A" }
+marker_marked = { fg = "#B48EAD", bg = "#B48EAD" }
+marker_selected = { fg = "#EBCB8B", bg = "#EBCB8B" }
+
+cwd = { fg = "#EBCB8B" }
+
+find_keyword = { fg = "#BF616A", bg = "#2E3440" }
+find_position = {}
+
+count_copied = { fg = "#2E3440", bg = "#A3BE8C" }
+count_cut = { fg = "#2E3440", bg = "#BF616A" }
+count_selected = { fg = "#2E3440", bg = "#EBCB8B" }
+
+border_symbol = "│"
+border_style = { fg = "#4C566A" }
+
+[indicator]
+parent = { reversed = true }
+current = { reversed = true }
+preview = { reversed = true }
+padding = { open = "█", close = "█" }
+
+[tabs]
+active = { fg = "#2E3440", bg = "#88C0D0" }
+inactive = { fg = "#88C0D0", bg = "#3B4252" }
+
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
+
+
+[mode]
+normal_main = { fg = "#2E3440", bg = "#88C0D0" }
+normal_alt = { fg = "#88C0D0", bg = "#3B4252" }
+select_main = { fg = "#2E3440", bg = "#B48EAD" }
+select_alt = { fg = "#B48EAD", bg = "#3B4252" }
+unset_main = { fg = "#2E3440", bg = "#EBCB8B" }
+unset_alt = { fg = "#EBCB8B", bg = "#3B4252" }
+
+
+[status]
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+overall = { fg = "#88C0D0", bg = "#2E3440" }
+
+progress_label = { fg = "#ECEFF4", bold = true }
+progress_normal = { fg = "#88C0D0", bg = "#3B4252" }
+progress_error = { fg = "#BF616A", bg = "#3B4252" }
+
+perm_type = { fg = "#A3BE8C" }
+perm_read = { fg = "#EBCB8B" }
+perm_write = { fg = "#BF616A" }
+perm_exec = { fg = "#8FBCBB" }
+perm_sep = { fg = "#4C566A" }
+
+
+[which]
+border = { fg = "#81A1C1" }
+cols = 2
+separator = " - "
+separator_style = { fg = "#4C566A" }
+mask = { bg = "#3B4252" }
+rest = { fg = "#4C566A" }
+cand = { fg = "#88C0D0" }
+desc = { fg = "#D8DEE9" }
+
+[confirm]
+border = { fg = "#81A1C1" }
+title = { fg = "#88C0D0" }
+body = {}
+list = {}
+btn_yes = { reversed = true }
+btn_no = {}
+
+[spot]
+border = { fg = "#81A1C1" }
+title = { fg = "#88C0D0" }
+tbl_col = { fg = "#88C0D0" }
+tbl_cell = { fg = "#EBCB8B", reversed = true }
+
+[pick]
+border = { fg = "#81A1C1" }
+active = { fg = "#B48EAD", bold = true }
+inactive = {}
+
+[input]
+border = { fg = "#81A1C1" }
+title = {}
+value = {}
+selected = { reversed = true }
+
+[cmp]
+border = { fg = "#81A1C1" }
+active = { reversed = true }
+inactive = {}
+
+[tasks]
+border = { fg = "#81A1C1" }
+title = {}
+hovered = { fg = "#B48EAD" }
+
+[help]
+border = { fg = "#81A1C1" }
+chord = { fg = "#8FBCBB" }
+action = { fg = "#B48EAD" }
+hovered = { reversed = true, bold = true }
+
+[notify]
+title_info = { fg = "#A3BE8C" }
+title_warn = { fg = "#EBCB8B" }
+title_error = { fg = "#BF616A" }

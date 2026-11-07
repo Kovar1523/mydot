@@ -1,0 +1,276 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+;   kiddae/polybar-themes miniblocks 원본(config.ini.upstream) 그대로.
+;   dwm·이 PC에서 안 돌아가는 곳만 바꿈 (각 자리에 "원본:" 주석):
+;   - 색: xrdb → 같은 pywal 색 (~/.cache/wal/colors-polybar.ini)
+;   - 작업공간: bspwm → xworkspaces (dwm 태그 1~5를 원본처럼 로마자 I~V로)
+;   - 음악: mpd(설치 안 됨) → playerctl, 표시는 원본 mpd 형식 그대로
+;   - 글꼴: 한글 대체 글꼴 font-3 추가 (원본 글꼴에 한글이 없음)
+;   - 크기: 원본의 1.3배 (높이·글꼴·music/tray 폭, 화면 끝 간격 10px은 그대로), ws 폭은 태그 I~V에 맞춤
+;   실행: ~/.config/polybar/launch.sh --miniblocks (dwm altbarcmd)
+
+include-file = ~/.cache/wal/colors-polybar.ini
+
+[colors]
+
+; 원본: ${xrdb:color0:#222} / ${xrdb:color7:#222} / ${xrdb:color15:#222}
+background = ${color.color0}
+foreground = ${color.color7}
+highlight = ${color.color15}
+
+;  _                    
+; | |__   __ _ _ __ ___ 
+; | '_ \ / _` | '__/ __|
+; | |_) | (_| | |  \__ \
+; |_.__/ \__,_|_|  |___/
+
+[bar/base]
+enable-ipc = true
+; 원본 ×1.3: pixelsize 9, 8, size 10, 12 / 세로 위치 2, 2, 3, 3
+font-0=CozetteVector:pixelsize=11.7;3
+font-1=FontAwesome5Free:style=Solid:pixelsize=10.4:antialias=true;3
+font-2=IPAGothic:style=Regular:size=13:antialias=true;4
+; 추가: 한글 (위 글꼴에 없는 글자만 여기서 그림)
+font-3=D2KodingLigature Nerd Font:pixelsize=15.6;4
+
+padding = 2
+border-size = 0
+border-color = ${colors.foreground}
+
+; 원본 30 (×1.3)
+height = 39
+;radius = 20
+;Works very well with a radius like this! Put it on every bar.
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+override-redirect=false
+offset-y = 10
+
+; 원본: wm-restack = bspwm (bspwm 전용)
+
+[bar/ws]
+inherit = bar/base
+; 원본 14.5% (bspwm 작업공간 I~X 10개 폭) → dwm 태그 I~V 내용 폭에 맞춤
+width = 158
+
+
+offset-x = 10
+line-size = 1
+
+; 원본: modules-left = bspwm, scroll-up = bspwm-desknext, scroll-down = bspwm-deskprev (bspwm 전용)
+; 휠은 workspaces 모듈의 enable-scroll이 대신함
+modules-left = workspaces
+
+[bar/music]
+inherit = bar/base
+enable-ipc = true
+; 원본 25%, 37.5% (×1.3, 가운데 정렬 유지: offset = 50% - width/2)
+width = 32.5%
+
+offset-x = 33.75%
+
+; Spotify (uses playerctl)
+; modules-left = previous playpause next 
+; modules-center = spotify
+; Mpd
+; 원본: modules-center = mpd (mpd 설치 안 됨)
+modules-center = music
+
+[bar/tray]
+inherit = bar/base
+; 원본 9%, 90.5% (×1.3, 오른쪽 여백 0.5% 유지)
+width = 11.7%
+
+offset-x = 87.8%
+
+modules-left = pulseaudio time 
+
+;                      _       _           
+;  _ __ ___   ___   __| |_   _| | ___  ___ 
+; | '_ ` _ \ / _ \ / _` | | | | |/ _ \/ __|
+; | | | | | | (_) | (_| | |_| | |  __/\__ \
+; |_| |_| |_|\___/ \__,_|\__,_|_|\___||___/
+                                         
+[module/wsnumber]
+type = custom/script
+exec = bspc query -D -d focused --names
+tail = true
+interval = 0
+format-margin = 2
+format = "<label>"
+scroll-up = bspc desktop -f next
+scroll-down = bspc desktop -f prev
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:33:...%
+label-margin = 2
+
+[module/bspwm]
+type = internal/bspwm
+reverse-scroll = false
+
+label-focused = %name%
+label-focused-underline = ${colors.highlight}
+label-focused-foreground = ${colors.highlight}
+label-focused-padding = 1
+
+label-occupied = %name%
+label-occupied-foreground = ${colors.highlight}
+label-occupied-padding = 1
+
+label-empty = %name%
+label-empty-padding = 1
+
+[module/mpd]
+type = internal/mpd
+host = 127.0.0.1
+port = 6600
+format-online = <icon-prev> <toggle> <icon-next>   <label-song>  <label-time>
+format-online-margin = 2
+
+format-offline = <label-offline>
+label-offline =   offline
+format-offline-padding = 2
+
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+
+label-song-maxlen = 50
+label-song-ellipsis = true
+
+; 원본 [module/bspwm]과 같은 모양: dwm 태그(EWMH 이름 1~5)를 로마자로
+[module/workspaces]
+type = internal/xworkspaces
+pin-workspaces = true
+enable-click = true
+enable-scroll = true
+
+icon-0 = 1;I
+icon-1 = 2;II
+icon-2 = 3;III
+icon-3 = 4;IV
+icon-4 = 5;V
+
+label-active = %icon%
+label-active-underline = ${colors.highlight}
+label-active-foreground = ${colors.highlight}
+label-active-padding = 1
+
+label-occupied = %icon%
+label-occupied-foreground = ${colors.highlight}
+label-occupied-padding = 1
+
+label-urgent = %icon%
+label-urgent-padding = 1
+
+label-empty = %icon%
+label-empty-padding = 1
+
+; 원본 [module/mpd]와 같은 표시를 playerctl로 (Firefox 등 MPRIS 플레이어, 1초마다)
+; <icon-prev> <toggle> <icon-next>   <label-song>  <label-time>
+; - 아이콘 클릭: 이전 / 재생·일시정지 / 다음
+; - 곡: "아티스트 - 제목", 50자 넘으면 47자 + ... (원본 label-song-maxlen 50, ellipsis)
+; - 시간: 경과 / 길이 (길이를 알려 주는 플레이어만, Firefox는 안 알려 줌)
+; - 플레이어 없음: 원본 label-offline
+[module/music]
+type = custom/script
+interval = 1
+format-margin = 2
+exec = o=$(playerctl metadata --format '{{status}}|{{duration(position)}}|{{duration(mpris:length)}}|{{artist}}|{{title}}' 2>/dev/null) || { echo '  offline'; exit 0; }; printf '%s' "$o" | { IFS='|' read -r st po le ar ti; t=; [ "$st" = Playing ] && t=; s="$ti"; [ -n "$ar" ] && s="$ar - $ti"; s=$(printf '%s' "$s" | awk '{ if (length($0) > 50) $0 = substr($0, 1, 47) "..."; print }'); [ -n "$le" ] && s="$s  $po / $le"; echo "%{A1:playerctl previous:}%{A} %{A1:playerctl play-pause:}$t%{A} %{A1:playerctl next:}%{A}   $s"; }
+
+[module/time]
+type = internal/date
+interval = 10
+format-margin = 2
+
+time = "%H:%M"
+date = "%d %b"
+
+label = %date%, %time%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume-margin = 1
+format-volume = <ramp-volume> <label-volume>
+label-volume = %percentage:3:3%%
+use-ui-max = false
+interval = 5
+
+ramp-volume-0 = ""
+ramp-volume-1 = ""
+ramp-volume-2 = ""
+
+
+label-muted = "  muted"   
+label-muted-padding = 0
+
+;Spotify modules
+
+[module/previous]
+type = custom/script
+exec = echo " "
+exec-if = "pgrep spotify"
+click-left = "playerctl previous"
+
+
+[module/next]
+type = custom/script
+exec = echo "  "
+exec-if = "pgrep spotify"
+click-left = "playerctl next"
+
+[module/playpause]
+type = custom/script
+exec = spotifystatus
+exec-if = "pgrep spotify"
+format-padding = 1
+tail = true
+interval = 0
+click-left = "playerctl -p spotify play-pause"
+
+
+[module/spotify]
+type = custom/script
+exec = playerctl -p spotify metadata --format '{{artist}} - {{title}}'
+exec-if = "pgrep spotify"
+format-padding = 1
+tail = true
+interval = 1
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = true
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+; vim:ft=dosini
+                      
+

@@ -1,0 +1,36 @@
+Xcursor.theme: BlueGlass-Vista
+Xcursor.size: 32
+
+! 글꼴 DPI 고정: Ultimate(dGPU) 모드에서는 NVIDIA 드라이버가 EDID로 화면 DPI를 143으로 잡아
+! dunst 알림·fcitx5 한/영 팝업 등이 1.5배로 커짐 (하이브리드 모드의 AMD는 96). 두 모드 모두 96으로 통일
+Xft.dpi: 96
+
+! xscreensaver unlock dialog: wal colors, white accent
+*dateFormat:
+*passwd.uname:	False
+
+*Dialog.bodyFont:	Terminess Nerd Font Mono 14
+*Dialog.labelFont:	Terminess Nerd Font Mono 14
+*Dialog.buttonFont:	Terminess Nerd Font Mono 14
+*Dialog.errorFont:	Terminess Nerd Font Mono Bold 14
+*Dialog.unameFont:	Terminess Nerd Font Mono 12
+*Dialog.headingFont:	Terminess Nerd Font Mono Bold 16
+! tiny dateFont to hide the keyboard layout name (bottom right)
+*Dialog.dateFont:	Terminess Nerd Font Mono 1
+
+*default.Dialog.background:	#0c161d
+*default.Dialog.foreground:	#c2c4c6
+*default.Dialog.text.background:	#1a232a
+*default.Dialog.text.foreground:	#ECEFF4
+*default.Dialog.button.background:	#1a232a
+*default.Dialog.button.foreground:	#c2c4c6
+*default.Dialog.error.foreground:	#bf616a
+*default.Dialog.logo.background:	#0c161d
+*default.Dialog.thermometer.width:	2
+*default.Dialog.thermometer.foreground:	#ECEFF4
+*default.Dialog.thermometer.background:	#0c161d
+*default.Dialog.shadowWidth:	1
+*default.Dialog.topShadowColor:	#30383e
+*default.Dialog.bottomShadowColor:	#30383e
+*default.Dialog.borderColor:	#ECEFF4
+*default.Dialog.borderWidth:	1

@@ -1,0 +1,386 @@
+# yazi 26.9.1 기본 keymap — F1 도움말 설명(desc)만 한글로 번역
+
+[mgr]
+
+keymap = [
+	{ on = "<Esc>", run = "escape",             desc = "비주얼 모드 종료, 선택 해제 또는 검색 취소" },
+	{ on = "<C-[>", run = "escape",             desc = "비주얼 모드 종료, 선택 해제 또는 검색 취소" },
+	{ on = "q",     run = "quit",               desc = "종료" },
+	{ on = "Q",     run = "quit --no-cwd-file", desc = "cwd-file 출력 없이 종료" },
+	{ on = "<C-c>", run = "close",              desc = "현재 탭 닫기 (마지막 탭이면 종료)" },
+	{ on = "<C-z>", run = "suspend",            desc = "프로세스 일시 중단" },
+
+	# Hop around
+	{ on = "k",      run = "arrow prev", desc = "이전 파일" },
+	{ on = "j",      run = "arrow next", desc = "다음 파일" },
+	{ on = "<Up>",   run = "arrow prev", desc = "이전 파일" },
+	{ on = "<Down>", run = "arrow next", desc = "다음 파일" },
+
+	{ on = [ "g", "g" ], run = "arrow top", desc = "맨 위로 이동" },
+	{ on = "G",          run = "arrow bot", desc = "맨 아래로 이동" },
+	{ on = "<Home>",     run = "arrow top", desc = "맨 위로 이동" },
+	{ on = "<End>",      run = "arrow bot", desc = "맨 아래로 이동" },
+
+	{ on = "<C-u>", run = "arrow -50%",  desc = "커서를 반 페이지 위로" },
+	{ on = "<C-d>", run = "arrow 50%",   desc = "커서를 반 페이지 아래로" },
+	{ on = "<C-b>", run = "arrow -100%", desc = "커서를 한 페이지 위로" },
+	{ on = "<C-f>", run = "arrow 100%",  desc = "커서를 한 페이지 아래로" },
+
+	{ on = "<S-PageUp>",   run = "arrow -50%",  desc = "커서를 반 페이지 위로" },
+	{ on = "<S-PageDown>", run = "arrow 50%",   desc = "커서를 반 페이지 아래로" },
+	{ on = "<PageUp>",     run = "arrow -100%", desc = "커서를 한 페이지 위로" },
+	{ on = "<PageDown>",   run = "arrow 100%",  desc = "커서를 한 페이지 아래로" },
+
+	# Navigation
+	{ on = "h", run = "leave", desc = "상위 디렉터리로 이동" },
+	{ on = "l", run = "enter", desc = "하위 디렉터리로 진입" },
+
+	{ on = "<Left>",  run = "leave", desc = "상위 디렉터리로 이동" },
+	{ on = "<Right>", run = "enter", desc = "하위 디렉터리로 진입" },
+
+	{ on = "H", run = "back",    desc = "이전 디렉터리로 (뒤로)" },
+	{ on = "L", run = "forward", desc = "다음 디렉터리로 (앞으로)" },
+
+	# Toggle
+	{ on = "<Space>", run = [ "toggle", "arrow 1" ], desc = "현재 파일 선택/해제" },
+	{ on = "<C-a>",   run = "toggle_all --state=on", desc = "모든 파일 선택" },
+	{ on = "<C-r>",   run = "toggle_all",            desc = "전체 파일 선택 반전" },
+
+	# Visual mode
+	{ on = "v", run = "visual_mode",         desc = "비주얼 모드 진입 (선택 모드)" },
+	{ on = "V", run = "visual_mode --unset", desc = "비주얼 모드 진입 (해제 모드)" },
+
+	# Seeking
+	{ on = "K", run = "seek -5", desc = "미리보기를 5단위 위로 스크롤" },
+	{ on = "J", run = "seek 5",  desc = "미리보기를 5단위 아래로 스크롤" },
+
+	# Spotting
+	{ on = "<Tab>", run = "spot", desc = "커서 위치 파일 정보 보기 (spot)" },
+
+	# Operation
+	{ on = "o",         run = "open",                        desc = "선택한 파일 열기" },
+	{ on = "O",         run = "open --interactive",          desc = "선택한 파일을 프로그램 골라서 열기" },
+	{ on = "<Enter>",   run = "open",                        desc = "선택한 파일 열기" },
+	{ on = "<S-Enter>", run = "open --interactive",          desc = "선택한 파일을 프로그램 골라서 열기" },
+	{ on = "y",         run = "yank",                        desc = "선택한 파일 복사 (yank)" },
+	{ on = "x",         run = "yank --cut",                  desc = "선택한 파일 잘라내기" },
+	{ on = "p",         run = "paste",                       desc = "복사/잘라낸 파일 붙여넣기" },
+	{ on = "P",         run = "paste --force",               desc = "붙여넣기 (대상이 있으면 덮어쓰기)" },
+	{ on = "-",         run = "link",                        desc = "복사한 파일의 절대 경로로 심볼릭 링크 생성" },
+	{ on = "_",         run = "link --relative",             desc = "복사한 파일의 상대 경로로 심볼릭 링크 생성" },
+	{ on = "<C-->",     run = "hardlink",                    desc = "복사한 파일의 하드 링크 생성" },
+	{ on = "Y",         run = "unyank",                      desc = "복사/잘라내기 상태 취소" },
+	{ on = "X",         run = "unyank",                      desc = "복사/잘라내기 상태 취소" },
+	{ on = "d",         run = "remove",                      desc = "선택한 파일 휴지통으로 이동" },
+	{ on = "D",         run = "remove --permanently",        desc = "선택한 파일 영구 삭제" },
+	{ on = "a",         run = "create",                      desc = "파일 생성 (/로 끝나면 디렉터리)" },
+	{ on = "A",         run = "bulk_create",                 desc = "파일 일괄 생성" },
+	{ on = "r",         run = "rename --cursor=before_ext",  desc = "선택한 파일 이름 바꾸기" },
+	{ on = ";",         run = "shell --interactive",         desc = "셸 명령 실행" },
+	{ on = ":",         run = "shell --block --interactive", desc = "셸 명령 실행 (끝날 때까지 대기)" },
+	{ on = ".",         run = "hidden toggle",               desc = "숨김 파일 표시/숨기기" },
+	{ on = "s",         run = "search --via=fd",             desc = "fd로 파일 이름 검색" },
+	{ on = "S",         run = "search --via=rg",             desc = "ripgrep으로 파일 내용 검색" },
+	{ on = "<C-s>",     run = "escape --search",             desc = "진행 중인 검색 취소" },
+	{ on = "z",         run = "plugin fzf",                  desc = "fzf로 파일/디렉터리 이동" },
+	{ on = "Z",         run = "plugin zoxide",               desc = "zoxide로 디렉터리 이동" },
+
+	# Linemode
+	{ on = [ "m", "s" ], run = "linemode size",        desc = "줄 표시: 크기" },
+	{ on = [ "m", "p" ], run = "linemode permissions", desc = "줄 표시: 권한" },
+	{ on = [ "m", "b" ], run = "linemode btime",       desc = "줄 표시: 생성 시각" },
+	{ on = [ "m", "m" ], run = "linemode mtime",       desc = "줄 표시: 수정 시각" },
+	{ on = [ "m", "o" ], run = "linemode owner",       desc = "줄 표시: 소유자" },
+	{ on = [ "m", "n" ], run = "linemode none",        desc = "줄 표시: 없음" },
+
+	# Copy
+	{ on = [ "c", "c" ], run = "copy path",             desc = "파일 경로 복사" },
+	{ on = [ "c", "C" ], run = "copy url",              desc = "파일 URL 복사" },
+	{ on = [ "c", "d" ], run = "copy dirpath",          desc = "디렉터리 경로 복사" },
+	{ on = [ "c", "D" ], run = "copy dirurl",           desc = "디렉터리 URL 복사" },
+	{ on = [ "c", "f" ], run = "copy filename",         desc = "파일 이름 복사" },
+	{ on = [ "c", "n" ], run = "copy name_without_ext", desc = "확장자 없는 파일 이름 복사" },
+
+	# Filter
+	{ on = "f", run = "filter --smart", desc = "파일 필터링" },
+
+	# Find
+	{ on = "/", run = "find --smart",            desc = "다음 파일 찾기" },
+	{ on = "?", run = "find --previous --smart", desc = "이전 파일 찾기" },
+	{ on = "n", run = "find_arrow",              desc = "다음 찾은 항목" },
+	{ on = "N", run = "find_arrow --previous",   desc = "이전 찾은 항목" },
+
+	# Sorting
+	{ on = [ ",", "m" ], run = [ "sort mtime --reverse=no", "linemode mtime" ],  desc = "수정 시각순 정렬" },
+	{ on = [ ",", "M" ], run = [ "sort mtime --reverse=yes", "linemode mtime" ], desc = "수정 시각순 정렬 (역순)" },
+	{ on = [ ",", "b" ], run = [ "sort btime --reverse=no", "linemode btime" ],  desc = "생성 시각순 정렬" },
+	{ on = [ ",", "B" ], run = [ "sort btime --reverse=yes", "linemode btime" ], desc = "생성 시각순 정렬 (역순)" },
+	{ on = [ ",", "e" ], run = "sort extension --reverse=no",                    desc = "확장자순 정렬" },
+	{ on = [ ",", "E" ], run = "sort extension --reverse=yes",                   desc = "확장자순 정렬 (역순)" },
+	{ on = [ ",", "a" ], run = "sort alphabetical --reverse=no",                 desc = "알파벳순 정렬" },
+	{ on = [ ",", "A" ], run = "sort alphabetical --reverse=yes",                desc = "알파벳순 정렬 (역순)" },
+	{ on = [ ",", "n" ], run = "sort natural --reverse=no",                      desc = "자연순 정렬" },
+	{ on = [ ",", "N" ], run = "sort natural --reverse=yes",                     desc = "자연순 정렬 (역순)" },
+	{ on = [ ",", "s" ], run = [ "sort size --reverse=no", "linemode size" ],    desc = "크기순 정렬" },
+	{ on = [ ",", "S" ], run = [ "sort size --reverse=yes", "linemode size" ],   desc = "크기순 정렬 (역순)" },
+	{ on = [ ",", "r" ], run = "sort random --reverse=no",                       desc = "무작위 정렬" },
+
+	# Goto
+	{ on = [ "g", "h" ],       run = "cd ~",             desc = "홈 디렉터리로 이동" },
+	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "~/.config로 이동" },
+	{ on = [ "g", "d" ],       run = "cd ~/Downloads",   desc = "~/Downloads로 이동" },
+	{ on = [ "g", "t" ],       run = "plugin trash",     desc = "휴지통으로 이동" },
+	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "경로 입력해서 이동" },
+	{ on = [ "g", "f" ],       run = "follow",           desc = "커서 위치 심볼릭 링크 따라가기" },
+
+	# Tabs
+	{ on = [ "t", "t" ], run = "tab_create --current",     desc = "현재 디렉터리로 새 탭 만들기" },
+	{ on = [ "t", "r" ], run = "tab_rename --interactive", desc = "현재 탭 이름 바꾸기" },
+
+	{ on = "1", run = "tab_switch 0", desc = "1번 탭으로 전환" },
+	{ on = "2", run = "tab_switch 1", desc = "2번 탭으로 전환" },
+	{ on = "3", run = "tab_switch 2", desc = "3번 탭으로 전환" },
+	{ on = "4", run = "tab_switch 3", desc = "4번 탭으로 전환" },
+	{ on = "5", run = "tab_switch 4", desc = "5번 탭으로 전환" },
+	{ on = "6", run = "tab_switch 5", desc = "6번 탭으로 전환" },
+	{ on = "7", run = "tab_switch 6", desc = "7번 탭으로 전환" },
+	{ on = "8", run = "tab_switch 7", desc = "8번 탭으로 전환" },
+	{ on = "9", run = "tab_switch 8", desc = "9번 탭으로 전환" },
+
+	{ on = "[", run = "tab_switch -1 --relative", desc = "이전 탭으로 전환" },
+	{ on = "]", run = "tab_switch 1 --relative",  desc = "다음 탭으로 전환" },
+
+	{ on = "{", run = "tab_swap -1", desc = "현재 탭을 이전 탭과 자리 바꾸기" },
+	{ on = "}", run = "tab_swap 1",  desc = "현재 탭을 다음 탭과 자리 바꾸기" },
+
+	# Tasks
+	{ on = "w", run = "tasks:show", desc = "작업 관리자 보기" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[tasks]
+
+keymap = [
+	{ on = "<Esc>", run = "close", desc = "작업 관리자 닫기" },
+	{ on = "<C-[>", run = "close", desc = "작업 관리자 닫기" },
+	{ on = "<C-c>", run = "close", desc = "작업 관리자 닫기" },
+	{ on = "w",     run = "close", desc = "작업 관리자 닫기" },
+
+	{ on = "k", run = "arrow prev", desc = "이전 작업" },
+	{ on = "j", run = "arrow next", desc = "다음 작업" },
+
+	{ on = "<Up>",   run = "arrow prev", desc = "이전 작업" },
+	{ on = "<Down>", run = "arrow next", desc = "다음 작업" },
+
+	{ on = "<Enter>", run = "inspect", desc = "작업 상세 보기" },
+	{ on = "x",       run = "cancel",  desc = "작업 취소" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[spot]
+
+keymap = [
+	{ on = "<Esc>", run = "close", desc = "spot 닫기" },
+	{ on = "<C-[>", run = "close", desc = "spot 닫기" },
+	{ on = "<C-c>", run = "close", desc = "spot 닫기" },
+	{ on = "<Tab>", run = "close", desc = "spot 닫기" },
+
+	{ on = "k", run = "arrow prev", desc = "이전 줄" },
+	{ on = "j", run = "arrow next", desc = "다음 줄" },
+	{ on = "h", run = "swipe prev", desc = "이전 파일로 넘기기" },
+	{ on = "l", run = "swipe next", desc = "다음 파일로 넘기기" },
+
+	{ on = "<Up>",    run = "arrow prev", desc = "이전 줄" },
+	{ on = "<Down>",  run = "arrow next", desc = "다음 줄" },
+	{ on = "<Left>",  run = "swipe prev", desc = "이전 파일로 넘기기" },
+	{ on = "<Right>", run = "swipe next", desc = "다음 파일로 넘기기" },
+
+	# Copy
+	{ on = [ "c", "c" ], run = "copy cell", desc = "선택한 셀 복사" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[pick]
+
+keymap = [
+	{ on = "<Esc>",   run = "close",          desc = "선택 취소" },
+	{ on = "<C-[>",   run = "close",          desc = "선택 취소" },
+	{ on = "<C-c>",   run = "close",          desc = "선택 취소" },
+	{ on = "<Enter>", run = "close --submit", desc = "선택 확정" },
+
+	{ on = "k", run = "arrow prev", desc = "이전 항목" },
+	{ on = "j", run = "arrow next", desc = "다음 항목" },
+
+	{ on = "<Up>",   run = "arrow prev", desc = "이전 항목" },
+	{ on = "<Down>", run = "arrow next", desc = "다음 항목" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[input]
+
+keymap = [
+	{ on = "<C-c>",   run = "close",          desc = "입력 취소" },
+	{ on = "<Enter>", run = "close --submit", desc = "입력 확정" },
+	{ on = "<Esc>",   run = "escape",         desc = "노멀 모드로 돌아가기 또는 입력 취소" },
+	{ on = "<C-[>",   run = "escape",         desc = "노멀 모드로 돌아가기 또는 입력 취소" },
+
+	# Mode
+	{ on = "i", run = "insert",                          desc = "삽입 모드 진입" },
+	{ on = "I", run = [ "move first-char", "insert" ],   desc = "첫 글자로 이동 후 삽입 모드 진입" },
+	{ on = "a", run = "insert --append",                 desc = "추가 모드 진입" },
+	{ on = "A", run = [ "move eol", "insert --append" ], desc = "줄 끝으로 이동 후 추가 모드 진입" },
+	{ on = "v", run = "visual",                          desc = "비주얼 모드 진입" },
+	{ on = "r", run = "replace",                         desc = "한 글자 바꾸기" },
+
+	# Selection
+	{ on = "V",     run = [ "move bol", "visual", "move eol" ], desc = "줄 처음부터 끝까지 선택" },
+	{ on = "<C-A>", run = [ "move eol", "visual", "move bol" ], desc = "줄 끝부터 처음까지 선택" },
+	{ on = "<C-E>", run = [ "move bol", "visual", "move eol" ], desc = "줄 처음부터 끝까지 선택" },
+
+	# Character-wise movement
+	{ on = "h",       run = "move -1", desc = "한 글자 뒤로" },
+	{ on = "l",       run = "move 1",  desc = "한 글자 앞으로" },
+	{ on = "<Left>",  run = "move -1", desc = "한 글자 뒤로" },
+	{ on = "<Right>", run = "move 1",  desc = "한 글자 앞으로" },
+	{ on = "<C-b>",   run = "move -1", desc = "한 글자 뒤로" },
+	{ on = "<C-f>",   run = "move 1",  desc = "한 글자 앞으로" },
+
+	# Word-wise movement
+	{ on = "b",         run = "backward",                   desc = "현재/이전 단어의 시작으로 이동" },
+	{ on = "B",         run = "backward wide",              desc = "현재/이전 WORD(공백 구분)의 시작으로 이동" },
+	{ on = "w",         run = "forward",                    desc = "다음 단어의 시작으로 이동" },
+	{ on = "W",         run = "forward wide",               desc = "다음 WORD(공백 구분)의 시작으로 이동" },
+	{ on = "e",         run = "forward --end-of-word",      desc = "현재/다음 단어의 끝으로 이동" },
+	{ on = "E",         run = "forward wide --end-of-word", desc = "현재/다음 WORD(공백 구분)의 끝으로 이동" },
+	{ on = "<A-b>",     run = "backward lean",              desc = "현재/이전 단어의 시작으로 이동" },
+	{ on = "<A-f>",     run = "forward lean --end-of-word", desc = "현재/다음 단어의 끝으로 이동" },
+	{ on = "<C-Left>",  run = "backward lean",              desc = "현재/이전 단어의 시작으로 이동" },
+	{ on = "<C-Right>", run = "forward lean --end-of-word", desc = "현재/다음 단어의 끝으로 이동" },
+
+	# Line-wise movement
+	{ on = "0",      run = "move bol",        desc = "줄 처음으로 이동" },
+	{ on = "$",      run = "move eol",        desc = "줄 끝으로 이동" },
+	{ on = "_",      run = "move first-char", desc = "공백이 아닌 첫 글자로 이동" },
+	{ on = "^",      run = "move first-char", desc = "공백이 아닌 첫 글자로 이동" },
+	{ on = "<C-a>",  run = "move bol",        desc = "줄 처음으로 이동" },
+	{ on = "<C-e>",  run = "move eol",        desc = "줄 끝으로 이동" },
+	{ on = "<Home>", run = "move bol",        desc = "줄 처음으로 이동" },
+	{ on = "<End>",  run = "move eol",        desc = "줄 끝으로 이동" },
+
+	# Delete
+	{ on = "<Backspace>", run = "backspace",         desc = "커서 앞 글자 삭제" },
+	{ on = "<Delete>",    run = "backspace --under", desc = "커서 위치 글자 삭제" },
+	{ on = "<C-h>",       run = "backspace",         desc = "커서 앞 글자 삭제" },
+	{ on = "<C-d>",       run = "backspace --under", desc = "커서 위치 글자 삭제" },
+
+	# Kill
+	{ on = "<C-u>",         run = "kill bol",      desc = "줄 처음까지 지우기" },
+	{ on = "<C-k>",         run = "kill eol",      desc = "줄 끝까지 지우기" },
+	{ on = "<C-w>",         run = "kill backward", desc = "현재 단어의 시작까지 지우기" },
+	{ on = "<A-d>",         run = "kill forward",  desc = "현재 단어의 끝까지 지우기" },
+	{ on = "<C-Backspace>", run = "kill backward", desc = "현재 단어의 시작까지 지우기" },
+	{ on = "<C-Delete>",    run = "kill forward",  desc = "현재 단어의 끝까지 지우기" },
+
+	# Cut/Yank/Paste
+	{ on = "d", run = "delete --cut",                                      desc = "선택한 글자 잘라내기" },
+	{ on = "D", run = [ "delete --cut", "move eol" ],                      desc = "줄 끝까지 잘라내기" },
+	{ on = "c", run = "delete --cut --insert",                             desc = "선택한 글자 잘라내고 삽입 모드 진입" },
+	{ on = "C", run = [ "delete --cut --insert", "move eol" ],             desc = "줄 끝까지 잘라내고 삽입 모드 진입" },
+	{ on = "s", run = [ "delete --cut --insert", "move 1" ],               desc = "현재 글자 잘라내고 삽입 모드 진입" },
+	{ on = "S", run = [ "move bol", "delete --cut --insert", "move eol" ], desc = "줄 전체 잘라내고 삽입 모드 진입" },
+	{ on = "x", run = [ "delete --cut", "move 1 --in-operating" ],         desc = "현재 글자 잘라내기" },
+	{ on = "y", run = "yank",                                              desc = "선택한 글자 복사" },
+	{ on = "p", run = "paste",                                             desc = "커서 뒤에 붙여넣기" },
+	{ on = "P", run = "paste --before",                                    desc = "커서 앞에 붙여넣기" },
+
+	# Undo/Redo/Casefy
+	{ on = "u",     run = [ "undo", "casefy lower" ], desc = "실행 취소 (비주얼 모드에서는 소문자로)" },
+	{ on = "U",     run = "casefy upper",             desc = "대문자로" },
+	{ on = "<C-r>", run = "redo",                     desc = "다시 실행" },
+
+	# History
+	{ on = "k",      run = "recall -1", desc = "이전 입력 기록 불러오기" },
+	{ on = "j",      run = "recall 1",  desc = "다음 입력 기록 불러오기" },
+	{ on = "<Up>",   run = "recall -1", desc = "이전 입력 기록 불러오기" },
+	{ on = "<Down>", run = "recall 1",  desc = "다음 입력 기록 불러오기" },
+	{ on = "<C-p>",  run = "recall -1", desc = "이전 입력 기록 불러오기" },
+	{ on = "<C-n>",  run = "recall 1",  desc = "다음 입력 기록 불러오기" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[confirm]
+
+keymap = [
+	{ on = "<Esc>",   run = "close",          desc = "확인 취소" },
+	{ on = "<C-[>",   run = "close",          desc = "확인 취소" },
+	{ on = "<C-c>",   run = "close",          desc = "확인 취소" },
+	{ on = "<Enter>", run = "close --submit", desc = "확인" },
+
+	{ on = "n", run = "close",          desc = "확인 취소" },
+	{ on = "y", run = "close --submit", desc = "확인" },
+
+	{ on = "k", run = "arrow prev", desc = "이전 줄" },
+	{ on = "j", run = "arrow next", desc = "다음 줄" },
+
+	{ on = "<Up>",   run = "arrow prev", desc = "이전 줄" },
+	{ on = "<Down>", run = "arrow next", desc = "다음 줄" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[cmp]
+
+keymap = [
+	{ on = "<C-c>",   run = "close",                                      desc = "자동완성 취소" },
+	{ on = "<Tab>",   run = "close --submit",                             desc = "자동완성 적용" },
+	{ on = "<Enter>", run = [ "close --submit", "input:close --submit" ], desc = "자동완성 적용 후 입력 확정" },
+
+	{ on = "<A-k>", run = "arrow prev", desc = "이전 항목" },
+	{ on = "<A-j>", run = "arrow next", desc = "다음 항목" },
+
+	{ on = "<Up>",   run = "arrow prev", desc = "이전 항목" },
+	{ on = "<Down>", run = "arrow next", desc = "다음 항목" },
+
+	{ on = "<C-p>", run = "arrow prev", desc = "이전 항목" },
+	{ on = "<C-n>", run = "arrow next", desc = "다음 항목" },
+
+	# Help
+	{ on = "~",    run = "help", desc = "도움말 열기" },
+	{ on = "<F1>", run = "help", desc = "도움말 열기" },
+]
+
+[help]
+
+keymap = [
+	{ on = "<Esc>",   run = "escape",         desc = "노멀 모드 진입 또는 도움말 숨기기" },
+	{ on = "<C-[>",   run = "escape",         desc = "노멀 모드 진입 또는 도움말 숨기기" },
+	{ on = "<C-c>",   run = "close",          desc = "도움말 닫기" },
+	{ on = "<Enter>", run = "close --submit", desc = "도움말 닫고 선택한 동작 실행" },
+
+	# Navigation
+	{ on = "k", run = "arrow prev", desc = "이전 줄" },
+	{ on = "j", run = "arrow next", desc = "다음 줄" },
+
+	{ on = "<Up>",   run = "arrow prev", desc = "이전 줄" },
+	{ on = "<Down>", run = "arrow next", desc = "다음 줄" },
+
+	{ on = "<C-p>", run = "arrow prev", desc = "이전 줄" },
+	{ on = "<C-n>", run = "arrow next", desc = "다음 줄" },
+]

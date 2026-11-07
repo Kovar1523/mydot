@@ -1,0 +1,65 @@
+[flavor]
+dark  = "nord"
+light = "nord"
+
+# Flavor가 지정한 배경색을 지우고 터미널 기본 배경 사용
+[status]
+overall = { fg = "#88C0D0" }
+
+[which]
+border          = { fg = "#81A1C1" }   # flavor의 다른 팝업(입력·확인 창 등) 테두리와 같은 색
+cols            = 3
+mask            = {}
+separator       = " → "
+separator_style = { fg = "#4C566A" }
+cand            = { fg = "#88C0D0", bold = true }
+desc            = { fg = "#D8DEE9", italic = true }
+
+# 파일 이름·아이콘 색 (Nord). yazi 는 flavor 안의 [filetype]·[icon] 을 무시하므로 여기에 둠
+[filetype]
+rules = [
+    # images
+    { mime = "image/*", fg = "#EBCB8B" },
+
+    # media
+    { mime = "{audio,video}/*", fg = "#B48EAD" },
+
+    # archives
+    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#D08770" },
+
+    # documents
+    { mime = "application/{pdf,doc,rtf,vnd.*}", fg = "#8FBCBB" },
+
+    # broken links
+    { url = "*", is = "orphan", fg = "#BF616A" },
+
+    # executables
+    { url = "*", is = "exec", fg = "#A3BE8C" },
+
+    # fallback
+    { url = "*", fg = "#D8DEE9" },
+    { url = "*/", fg = "#88C0D0" },
+]
+
+# 폴더 아이콘: 기본값(Material #03a9f4, #009688, #ff9800)을 Nord 로 덮어씀 (글리프는 기본값과 동일)
+[icon]
+prepend_dirs = [
+    { name = ".config", text = "", fg = "#D08770" },
+    { name = ".git", text = "", fg = "#8FBCBB" },
+    { name = ".github", text = "", fg = "#88C0D0" },
+    { name = ".npm", text = "", fg = "#88C0D0" },
+    { name = "Desktop", text = "", fg = "#8FBCBB" },
+    { name = "Development", text = "", fg = "#8FBCBB" },
+    { name = "Documents", text = "", fg = "#8FBCBB" },
+    { name = "Downloads", text = "", fg = "#8FBCBB" },
+    { name = "Library", text = "", fg = "#8FBCBB" },
+    { name = "Movies", text = "", fg = "#8FBCBB" },
+    { name = "Music", text = "", fg = "#8FBCBB" },
+    { name = "Pictures", text = "", fg = "#8FBCBB" },
+    { name = "Public", text = "", fg = "#8FBCBB" },
+    { name = "Videos", text = "", fg = "#8FBCBB" },
+]
+prepend_conds = [
+    { if = "dir & hovered", text = "", fg = "#88C0D0" },
+    { if = "dir", text = "", fg = "#88C0D0" },
+]

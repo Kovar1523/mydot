@@ -1,0 +1,20 @@
+/* rofi-emoji (MOD+o), Hack style */
+
+@import "hack.rasi"
+
+configuration {
+	display-emoji:					"emoji";
+}
+
+textbox-prompt-colon {
+	str:							"";
+}
+
+/* dwm's -emoji-format draws the emoji x-large; rofi clips at the element-text box, so pad it there */
+element {
+	padding:						3px 8px;
+}
+
+element-text {
+	padding:						5px 0px;
+}

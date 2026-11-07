@@ -1,0 +1,63 @@
+/* Polkit agent (cmd-polkit-agent -> scripts/polkit-rofi.py, rofi -dmenu -password), Hack style.
+ * While checking, the script swaps entry for textbox-check. */
+
+@import "hack.rasi"
+
+window {
+	width:							480px;
+}
+
+mainbox {
+	children:						[ header, message, passbox, listview ];
+	padding:						2px 10px 0px 10px;
+}
+
+header {
+	orientation:					horizontal;
+	expand:							false;
+	children:						[ textbox-prompt-colon, textbox-title ];
+	border:							0px 0px 1px 0px;
+	border-color:					@ac;
+}
+
+textbox-prompt-colon {
+	str:							"";
+}
+
+textbox-title {
+	content:						"Authenticate";
+	expand:							true;
+	padding:						10px 10px 10px 0px;
+	text-color:						@ac;
+}
+
+message {
+	padding:						0px 10px;
+}
+
+textbox {
+	text-color:						@fg;
+}
+
+passbox {
+	orientation:					horizontal;
+	expand:							false;
+	children:						[ prompt, entry ];
+	padding:						0px 0px 0px 10px;
+}
+
+entry {
+	placeholder:					"";
+}
+
+textbox-check {
+	expand:							true;
+	markup:							true;
+	padding:						10px 10px 10px 0px;
+	content:						"";
+}
+
+listview {
+	lines:							0;
+	fixed-height:					false;
+}

@@ -1,0 +1,284 @@
+#!/usr/bin/env python3
+
+# rofi wrapper for networkmanager_dmenu (Hack style network menu, rofi/networkmenu.rasi).
+# Named rofi because nmdm only adds -dmenu -p / -password for a launcher called rofi.
+# Main menu sections (labels are non-selectable urgent rows):
+#   Connected  rows nmdm marked with active_chars (*)
+#   Available  Wi-Fi (config.ini format: name<TAB>security<TAB>icon), then wired/VPN/other profiles
+#   Menu       the remaining actions as 1) 2) 3); digit keys run them directly
+# Passphrase uses networkpass.rasi, other lists (delete, saved, ...) networksub.rasi.
+# Only the display text changes, so the original line goes back to nmdm when selected.
+
+import os
+import re
+import signal
+import subprocess
+import sys
+import unicodedata
+
+CELL = 8       # Terminess Nerd Font Mono 12 cell (px)
+WIDE = 14      # wide glyph such as Hangul (Pretendard fallback, px)
+WIDTH = 45     # row text width in cells (networkmenu.rasi: 360px)
+NAME_X = 24    # name column (px): icon or number + gap
+MARK = 2       # active_chars (*) + space in front of nmdm lines
+MAX_LINES = 12
+ICONS = "\U000F08FE\U000F08F4\U000F08F6\U000F08F8\U000F08FA"   # config.ini wifi_icons
+# nmdm 프로필 줄(이름:종류)의 종류 → 아이콘, 오른쪽 열에 보일 이름
+KINDS = {
+    "Eth": ("\U000F0200", "wired"),
+    "VLAN": ("\U000F0200", "vlan"),
+    "VPN": ("\U000F0582", "vpn"),
+    "Wireguard": ("\U000F0582", "wireguard"),
+    "Bluetooth": ("\U000F00AF", "bluetooth"),
+    "Hotspot": ("\U000F0003", "hotspot"),
+    "GSM": ("\U000F0318", "gsm"),
+}
+# create_other_actions()와 Saved connections: menu 칸으로 가는 줄
+MENU = re.compile(r"(Enable|Disable) (WiFi|Networking|Bluetooth|WWAN)|Launch Connection Manager"
+                  r"|Delete a Connection|Rescan WiFi Networks|Show WiFi password|Saved connections")
+# 하위 창 프롬프트 → 맨 위 선 제목
+TITLES = {
+    "CHOOSE CONNECTION TO DELETE:": "delete",
+    "CHOOSE ADAPTER:": "adapter",
+    "CHOOSE CONNECTION:": "connection",
+}
+RUNTIME = os.environ.get("XDG_RUNTIME_DIR")
+LAST_SSID = os.path.join(RUNTIME, "nmdm-ssid") if RUNTIME else None
+
+
+def width(s):
+    return sum(WIDE if unicodedata.east_asian_width(c) in "WF" else CELL for c in s)
+
+
+def fit(s, px):
+    """px 폭에 맞게 자른다(…)"""
+    if width(s) > px:
+        while width(s) > px - CELL:
+            s = s[:-1]
+        s += "…"
+    return s
+
+
+def esc(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def span(s, color=None, bold=False, alpha=None):
+    attrs = (f" color='{color}'" if color else "") + (" weight='bold'" if bold else "") \
+        + (f" fgalpha='{alpha}'" if alpha else "")
+    return f"<span{attrs}>{s}</span>"
+
+
+def option(text, **opts):
+    return text + "\0" + "\x1f".join(f"{k}\x1f{v}" for k, v in opts.items())
+
+
+def label(title):
+    """section label row (non-selectable, drawn dim by the urgent style)"""
+    return option(" ", display=esc(title), nonselectable="true", permanent="true")
+
+
+def parse(line):
+    """메인 메뉴 줄 → (연결 여부, 아이콘, 이름, 오른쪽 열) 또는 메뉴 줄이면 None"""
+    active, body = line[:MARK].strip() != "", line[MARK:]
+    parts = body.split("\t")
+    if len(parts) == 3 and len(parts[2]) == 1 and parts[2] in ICONS:
+        return active, parts[2], parts[0].rstrip(), parts[1]
+    if MENU.fullmatch(body.strip()):
+        return None
+    name, _, kind = body.rpartition(":")
+    icon, label = KINDS.get(kind, (" ", kind.lower()))
+    return active, icon, name if name else body, label
+
+
+def args_value(args, flag):
+    return args[args.index(flag) + 1] if flag in args and args.index(flag) + 1 < len(args) else None
+
+
+def set_arg(args, flag, value):
+    if flag in args:
+        args[args.index(flag) + 1] = value
+    else:
+        args += [flag, value]
+
+
+def theme_sibling(args, name):
+    """-theme로 받은 networkmenu.rasi 옆의 다른 테마 파일로 바꾼다"""
+    theme = args_value(args, "-theme")
+    if theme:
+        set_arg(args, "-theme", os.path.join(os.path.dirname(theme), name))
+
+
+def run(args, rows, hotkeys=()):
+    """rofi를 띄우고 고른 줄을 nmdm에 넘긴다. 숫자키(kb-custom-N)는 hotkeys[N-1] 줄을 고른 것으로 친다"""
+    data = ("\n".join(rows) + "\n").encode("utf-8", "surrogateescape") if rows else b""
+    res = subprocess.run(["/usr/bin/rofi", *args], input=data, stdout=subprocess.PIPE)
+    if 10 <= res.returncode < 10 + len(hotkeys):
+        sys.stdout.buffer.write((hotkeys[res.returncode - 10] + "\n").encode("utf-8", "surrogateescape"))
+        return "", 0
+    # 단축키가 아닌 custom 키(Alt+0 등, 10~28)나 신호로 끝난 rofi(음수)는 취소(1)로 넘긴다
+    if res.returncode:
+        return "", 1
+    sys.stdout.buffer.write(res.stdout)
+    return res.stdout.decode("utf-8", "surrogateescape").rstrip("\n"), 0
+
+
+def main_menu(args, lines):
+    connected, available, menu = [], [], []
+    for line in lines:
+        if not line.strip():
+            continue
+        p = parse(line)
+        if p is None:
+            menu.append(line)
+        elif p[0]:
+            connected.append((line, p))
+        else:
+            available.append((line, p))
+    # Wi-Fi가 위로, 유선·VPN 등 프로필은 그 아래로 (nmdm은 유선을 먼저 보낸다)
+    available.sort(key=lambda lp: lp[1][1] not in ICONS)
+
+    # 오른쪽 열(보안, 프로필 종류)은 가장 긴 값에 맞춰 오른쪽 끝(한 칸 남김)에 우정렬한다
+    side = max((len(p[3]) for _, p in connected + available), default=0)
+    side_x = (WIDTH - side) * CELL
+    name_px = side_x - NAME_X - 2 * CELL
+
+    def net_row(line, p):
+        _, icon, name, right = p
+        shown = (icon + "\t" + esc(fit(name, name_px)) + "\t"
+                 + span(esc(right.rjust(side)), alpha="60%"))
+        return option(line, display=shown)
+
+    def note(text):
+        return option(" ", display="\t" + esc(text), nonselectable="true", permanent="true")
+
+    rows, urgent, active = [], [], []
+    urgent.append(len(rows))
+    rows.append(label("Connected"))
+    for line, p in connected:
+        active.append(len(rows))
+        rows.append(net_row(line, p))
+    if not connected:
+        urgent.append(len(rows))
+        rows.append(note("not connected"))
+    urgent.append(len(rows))
+    rows.append(label("Available"))
+    first = len(rows)
+    for line, p in available:
+        rows.append(net_row(line, p))
+    if not available:
+        bodies = {m[MARK:].strip() for m in menu}
+        urgent.append(len(rows))
+        rows.append(note("Wi-Fi off" if "Enable WiFi" in bodies
+                         else "networking off" if "Enable Networking" in bodies else "no networks"))
+        first = None
+    urgent.append(len(rows))
+    rows.append(label("Menu"))
+    if first is None:
+        first = len(rows)
+    hotkeys = menu[:9]
+    for i, line in enumerate(menu):
+        num = f"{i + 1})" if i < 9 else "  "
+        rows.append(option(line, display=span(num, bold=True) + "\t" + esc(line[MARK:].strip())))
+
+    n = len(hotkeys)
+    args += ["-markup-rows", "-no-custom", "-selected-row", str(first)]
+    if urgent:
+        args += ["-u", ",".join(map(str, urgent))]
+    if active:
+        args += ["-a", ",".join(map(str, active))]
+    for i in range(n):
+        args += [f"-kb-custom-{i + 1}", f"{i + 1},KP_{i + 1}"]
+    args += ["-theme-str", f"listview {{ lines: {min(len(rows), MAX_LINES)}; }}",
+             "-theme-str", f"element-text {{ tab-stops: [ {NAME_X}px, {side_x}px ]; }}"]
+
+    sel, rc = run(args, rows, hotkeys)
+    # 비밀번호 창 제목에 쓸 SSID
+    if rc == 0 and LAST_SSID:
+        p = parse(sel) if sel.strip() else None
+        if p and p[1] in ICONS:
+            try:
+                with open(LAST_SSID, "w", encoding="utf-8", errors="surrogateescape") as f:
+                    f.write(p[2])
+            except OSError:
+                pass
+    return rc
+
+
+def passphrase(args):
+    theme_sibling(args, "networkpass.rasi")
+    ssid = ""
+    if LAST_SSID:
+        try:
+            with open(LAST_SSID, encoding="utf-8", errors="surrogateescape") as f:
+                ssid = f.read().strip()
+        except OSError:
+            pass
+    set_arg(args, "-p", fit(ssid, (WIDTH - 20) * CELL) if ssid else "Wi-Fi")
+    sel, rc = run(args, [])
+    if rc or not sel:
+        cancel_nmdm()
+    return rc
+
+
+def cancel_nmdm():
+    """nmdm(get_passphrase)은 비밀번호 창을 Esc로 닫거나 빈 칸으로 넘겨도 빈 비밀번호로 새 프로필을 만들어
+    접속한다 → 지금 연결이 끊기고 'failed verification' 에러 알림 뒤 프로필을 지운다.
+    취소면 부모 nmdm을 끝내 그 시도를 막는다 (nmdm은 /usr/bin 패키지 파일이라 고치지 않음)"""
+    ppid = os.getppid()
+    try:
+        with open(f"/proc/{ppid}/cmdline", "rb") as f:
+            if b"networkmanager_dmenu" in f.read():
+                os.kill(ppid, signal.SIGTERM)
+    except OSError:
+        pass
+
+
+def submenu(args, lines, prompt):
+    """list window: prompt = short title; the DELETE 'x'? confirm shows Delete x?"""
+    theme_sibling(args, "networksub.rasi")
+    m = re.fullmatch(r"DELETE '(.*)'\?", prompt.strip())
+    saved = lines and all(l.rstrip().endswith(":SAVED") for l in lines if l.strip())
+    if m:
+        title, notch = "delete", m.group(1)
+    elif saved:
+        title, notch = "saved", ""
+    else:
+        title, notch = TITLES.get(prompt.strip(), prompt.strip().rstrip(":").lower()), ""
+    args += ["-markup-rows", "-no-custom"]
+    title = title[:1].upper() + title[1:]
+    set_arg(args, "-p", f"{title} {fit(notch, (WIDTH - len(title) - 8) * CELL)}?" if notch else title)
+    rows, seps = [], []
+    for line in lines:
+        if not line.strip():
+            seps.append(str(len(rows)))
+            rows.append(option(" ", display="─" * WIDTH, nonselectable="true"))
+            continue
+        text = line.strip()
+        if saved:
+            text = text[:-len(":SAVED")]
+        rows.append(option(line, display=esc(fit(text, WIDTH * CELL))))
+    if seps:
+        args += ["-u", ",".join(seps)]
+    args += ["-theme-str", f"listview {{ lines: {max(1, min(len(rows), MAX_LINES))}; }}"]
+    return run(args, rows)[1]
+
+
+text = sys.stdin.buffer.read().decode("utf-8", "surrogateescape")
+lines = text.split("\n")
+if lines[-1] == "":
+    lines.pop()
+# networkmanager_dmenu는 빈 줄에도 비활성 표시용 공백을 붙인다. 마지막 섹션 뒤의 빈 줄은 버린다
+while lines and not lines[-1].strip():
+    lines.pop()
+
+args = sys.argv[1:]
+prompt = args_value(args, "-p") or ""
+if "-password" in args:
+    rc = passphrase(args)
+elif any(MENU.fullmatch(l[MARK:].strip()) for l in lines if l.strip()) and \
+        any(l[MARK:].strip() == "Launch Connection Manager" for l in lines):
+    rc = main_menu(args, lines)
+else:
+    rc = submenu(args, lines, prompt)
+sys.exit(rc)

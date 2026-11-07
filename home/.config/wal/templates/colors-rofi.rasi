@@ -1,0 +1,14 @@
+/* pywal 템플릿: ~/.config/wal/apply.sh 를 실행할 때마다 ~/.cache/wal/colors-rofi.rasi 로 다시 만들어짐 */
+
+* {{
+  al:    #00000000;
+  bg:    {background}FF;
+  bga:   {background.lighten(10)}FF;  /* alt bg: buttons, search bar (white 10%) */
+  bgs:   {background.lighten(15)}FF;  /* 11-04 adi1090x 런처: 선택된 버튼 (흰색 15%, se와 같은 밝기) */
+  bgt:   {background.lighten(25)}FF;  /* selected button: wal bg + 25% */
+  bgw:   #0000004D;   /* base: black 30%, same as polybar and Firefox */
+  ac:    #ECEFF4FF;  /* 흰색 포인트 (11-04), 원래 {color6}FF */
+  se:    #ECEFF426;  /* 원래 {color6}26 */
+  fg:    {foreground}FF;
+  sp:    {color8}FF;
+}}

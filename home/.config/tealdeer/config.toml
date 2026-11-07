@@ -1,0 +1,30 @@
+# Nord (https://www.nordtheme.com/docs/colors-and-palettes)
+
+[display]
+compact = false
+use_pager = false
+
+[updates]
+auto_update = true
+auto_update_interval_hours = 720
+
+[search]
+# 한국어 페이지가 있으면 먼저, 없으면 영어
+languages = ["ko", "en"]
+
+[style.command_name]
+foreground = { rgb = { r = 136, g = 192, b = 208 } } # nord8
+bold = true
+
+[style.description]
+foreground = { rgb = { r = 216, g = 222, b = 233 } } # nord4
+
+[style.example_text]
+foreground = { rgb = { r = 129, g = 161, b = 193 } } # nord9
+
+[style.example_code]
+foreground = { rgb = { r = 236, g = 239, b = 244 } } # nord6
+
+[style.example_variable]
+foreground = { rgb = { r = 235, g = 203, b = 139 } } # nord13
+underline = true

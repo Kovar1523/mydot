@@ -1,0 +1,11 @@
+/* clipcat-menu (MOD+v), Hack style. Rows: clipcat-menu.toml [rofi] menu_length */
+
+@import "hack.rasi"
+
+textbox-prompt-colon {
+	str:							"";
+}
+
+entry {
+	placeholder:					"검색...";
+}

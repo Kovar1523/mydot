@@ -1,0 +1,37 @@
+;; Volume / brightness / profile OSD (Hack style), updated by ~/.config/dunst/osd.sh
+;; Fade-in: picom rule 'Eww - osd'. eww places bottom-anchored windows by the geometry height,
+;; so the content must fill exactly 400x103:
+;;   border 2 + padding 2 + header 41 + spacing 10 + row 36 + padding 10 + border 2 = 103
+
+(defvar osd_kind "volume")   ; volume | brightness | profile
+(defvar osd_icon "")
+(defvar osd_title "")
+(defvar osd_value "")        ; right side: 70% / Muted
+(defvar osd_pct 0)
+(defvar osd_state "")        ; muted
+(defvar osd_profile "")      ; quiet | balanced | performance
+
+(defwidget seg [name icon]
+  (box :class {osd_profile == name ? "seg sel" : "seg"}
+    (box :halign "center" :space-evenly false :spacing 8
+      (label :text icon)
+      (label :text name))))
+
+(defwindow osd
+  :monitor 0
+  :geometry (geometry :x "0px" :y "-111px" :width "400px" :height "103px" :anchor "bottom center")
+  :stacking "fg"
+  :wm-ignore true
+  (box :class "osd" :orientation "v" :space-evenly false :spacing 10
+    (box :class "header" :space-evenly false
+      (label :class {osd_state == "muted" ? "icon muted" : "icon"} :text osd_icon)
+      (label :class "title" :hexpand true :xalign 0 :text osd_title)
+      (label :class {osd_state == "muted" ? "value muted" : "value"} :text osd_value))
+    ;; both rows are stacked; the unused one is made transparent (:visible is reset when eww opens the window)
+    (overlay
+      (box :class {osd_kind == "profile" ? "row off" : "row"}
+        (progress :class {osd_state == "muted" ? "bar muted" : "bar"} :hexpand true :valign "center" :orientation "h" :value osd_pct))
+      (box :class {osd_kind == "profile" ? "segs" : "segs off"} :spacing 5
+        (seg :name "quiet" :icon "󰌪")
+        (seg :name "balanced" :icon "")
+        (seg :name "performance" :icon "")))))

@@ -1,0 +1,103 @@
+/* Notification center (scripts/notif-center.py, rofi script mode): cards grouped by date.
+ * Card text width 494px (window 584 - border 2 - padding 20 - card border 3 - card padding 21
+ * - icon 32 - spacing 12); keep notif-center.py LINE_PX / TIME_PX and the tab stop in sync. */
+
+@import "hack.rasi"
+
+configuration {
+	show-icons:						true;
+	icon-theme:						"Nordzy-turquoise-dark";
+}
+
+window {
+	location:						south east;
+	anchor:							south east;
+	x-offset:						-24px;
+	y-offset:						-78px;
+	width:							584px;
+}
+
+inputbar {
+	children:						[ textbox-prompt-colon, entry, prompt, button-clear, button-dnd ];
+}
+
+textbox-prompt-colon {
+	str:							"";
+}
+
+entry {
+	placeholder:					"검색...";
+}
+
+/* status: count, queued while dnd, clear confirm (written by the script) */
+prompt {
+	markup:							true;
+	text-color:						@fg;
+}
+
+/* icon buttons; the script recolors them while dnd is on or clear waits for a second press */
+button-clear, button-dnd {
+	expand:							false;
+	vertical-align:					0.5;
+	horizontal-align:				0.5;
+	margin:							4px 0px 4px 6px;
+	padding:						0px 9px;
+	background-color:				#FFFFFF26;
+	text-color:						@fg;
+	font:							"JetBrainsMono Nerd Font Mono 17";
+	cursor:							pointer;
+}
+
+button-clear {
+	content:						"󰗩";
+	action:							"kb-custom-2";
+}
+
+button-dnd {
+	content:						"󱏧";
+	action:							"kb-custom-3";
+}
+
+listview {
+	lines:							10;
+	spacing:						6px;
+}
+
+/* cards; urgent = critical (red bar), active = date header (no card) */
+element {
+	padding:						10px 12px 10px 9px;
+	spacing:						12px;
+	border:							0px 0px 0px 3px;
+	border-color:					transparent;
+	background-color:				#FFFFFF1A;
+	cursor:							pointer;
+}
+
+element selected.normal {
+	background-color:				#FFFFFF40;
+}
+
+element normal.urgent, element alternate.urgent {
+	border-color:					#BF616A;
+}
+
+element selected.urgent {
+	background-color:				#FFFFFF40;
+	border-color:					#BF616A;
+}
+
+element normal.active, element alternate.active, element selected.active {
+	background-color:				transparent;
+	border-color:					transparent;
+	cursor:							default;
+}
+
+element-icon {
+	size:							32px;
+	vertical-align:					0.5;
+	background-color:				transparent;
+}
+
+element-text {
+	tab-stops:						[ 438px ];
+}

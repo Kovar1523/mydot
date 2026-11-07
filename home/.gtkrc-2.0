@@ -1,0 +1,5 @@
+# GTK2 앱용 (gtk-3.0/gtk-4.0 settings.ini와 같은 값). 현재 gtk2 패키지는 설치돼 있지 않음
+gtk-theme-name="Nordic"
+gtk-icon-theme-name="Nordzy-turquoise-dark"
+gtk-cursor-theme-name="BlueGlass-Vista"
+gtk-cursor-theme-size=32

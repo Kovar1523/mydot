@@ -1,0 +1,11 @@
+/* Nord palette, base black 30% like polybar, buttons white 15% */
+* {
+    background:                     #0000004D;
+    background-alt:                 #FFFFFF26;
+    foreground:                     #D8DEE9ff;
+    border:               			#ECEFF4ff;
+    border-alt:               		#88C0D0ff;
+    border-inactive:                #4C566Aff;
+    selected:               		#FFFFFF40;
+    urgent:                         #BF616Aff;
+}

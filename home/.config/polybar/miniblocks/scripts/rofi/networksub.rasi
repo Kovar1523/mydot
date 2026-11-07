@@ -1,0 +1,7 @@
+/* Network sub menus (delete, saved, adapter, confirm). Prompt set by the wrapper */
+
+@import "networkmenu.rasi"
+
+element-text {
+	tab-stops:						[];
+}

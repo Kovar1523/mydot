@@ -1,0 +1,6 @@
+[Default Applications]
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/notion=notion.desktop
+x-scheme-handler/notion-agents=notion.desktop
+
+[Added Associations]

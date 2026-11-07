@@ -1,0 +1,21 @@
+/* Wi-Fi passphrase (rofi -password). Prompt = SSID picked in the main menu */
+
+@import "networkmenu.rasi"
+
+mainbox {
+	children:						[ inputbar ];
+	padding:						2px 10px;
+}
+
+inputbar {
+	children:						[ textbox-prompt-colon, prompt, entry ];
+	border:							0px;
+}
+
+textbox-prompt-colon {
+	str:							"";
+}
+
+entry {
+	placeholder:					"Password";
+}

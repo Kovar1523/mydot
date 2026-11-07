@@ -1,0 +1,40 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL": "1"
+  },
+  "skillOverrides": {
+    "anthropic-skills:docx": "off",
+    "anthropic-skills:pptx": "off",
+    "anthropic-skills:xlsx": "off",
+    "anthropic-skills:google-workspace": "off",
+    "anthropic-skills:docs": "off",
+    "anthropic-skills:morning": "off",
+    "anthropic-skills:import-memory": "off",
+    "claude-in-chrome": "off",
+    "claude-api": "off"
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c 'select((.session_title // \"\") == \"\") | (.prompt // \"\" | split(\"\\n\")[0] | gsub(\"^\\\\s+|\\\\s+$\"; \"\")) as $l | select($l != \"\") | {hookSpecificOutput: {hookEventName: \"UserPromptSubmit\", sessionTitle: (if ($l | length) > 30 then $l[0:30] + \"…\" else $l end)}}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "engineering@synced": false
+  },
+  "language": "Korean",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "theme": "auto",
+  "autoCompactEnabled": false
+}

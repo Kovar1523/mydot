@@ -1,0 +1,4 @@
+<!-- osd.sh(eww OSD)의 quiet 아이콘 U+F032A를 같은 폰트로 그린 것. dunst 아이콘 자리는 이미지만 받음 (osd-profile.sh) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <text x="7" y="37" font-family="D2KodingLigature Nerd Font" font-size="40" fill="#ECEFF4">&#xF032A;</text>
+</svg>

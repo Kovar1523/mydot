@@ -1,0 +1,239 @@
+/**
+ *
+ * Author : Aditya Shakya (adi1090x)
+ * Github : @adi1090x
+ * 
+ * Rofi Theme File
+ * Rofi Version: 1.7.3
+ **/
+
+@import "/home/kovar1523/.config/polybar/miniblocks/scripts/rofi/colors.rasi"
+
+/*****----- Configuration -----*****/
+configuration {
+	modi:                       "drun,run,filebrowser,window";
+    show-icons:                 true;
+    icon-theme:                 "Nordzy-turquoise-dark";
+    display-drun:               "APPS";
+    display-run:                "RUN";
+    display-filebrowser:        "FILES";
+    display-window:             "WINDOW";
+	drun-display-format:        "{name}";
+	window-format:              "{w} · {c} · {t}";
+    /* Super+Left/Right switch modes */
+    kb-mode-next:               "Shift+Right,Control+Tab,Super+Right";
+    kb-mode-previous:           "Shift+Left,Control+ISO_Left_Tab,Super+Left";
+}
+
+/*****----- Global Properties -----*****/
+* {
+    font:                        "JetBrainsMono Nerd Font Mono, Pretendard 10.5";
+    background:                  @bg;
+    background-alt:              @bga;
+    button-selected:             @bgs;
+    foreground:                  @fg;
+    selected:                    @se;
+    selected-text:               @ac;
+    active:                      #ECEFF41A;
+    urgent:                      #ECEFF433;
+    dim:                         @sp;
+    /* powermenu buttons flattened onto the black 30% base: white 15% / 25% over black 30% */
+    pm-bg:                       #5E5E5E67;  /* buttons, search */
+    pm-selected:                 #86868679;  /* selected button */
+    pm-fg:                       #D8DEE9FF;
+    pm-border:                   #ECEFF4FF;
+    pm-border-inactive:          #4C566AFF;
+    glass:                       @bgw;  /* base: black 30% like polybar */
+}
+
+/*****----- Main Window -----*****/
+window {
+    /* properties for window widget */
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    fullscreen:                  false;
+    width:                       1000px;
+    x-offset:                    0px;
+    y-offset:                    0px;
+
+    /* properties for all widgets */
+    enabled:                     true;
+    border-radius:               0px;
+    cursor:                      "default";
+    background-color:            transparent;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled:                     true;
+    spacing:                     0px;
+    background-color:            transparent;
+    orientation:                 horizontal;
+    children:                    [ "imagebox", "listbox" ];
+}
+
+imagebox {
+    padding:                     20px;
+    background-color:            @background;
+    background-image:            url("/home/kovar1523/usercustom/animals/baby_wolf.png", height);
+    orientation:                 vertical;
+    children:                    [ "inputbar", "dummy", "mode-switcher" ];
+}
+
+listbox {
+    spacing:                     20px;
+    padding:                     20px;
+    background-color:            @glass;
+    orientation:                 vertical;
+    children:                    [ "message", "listview" ];
+}
+
+dummy {
+    background-color:            transparent;
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+    enabled:                     true;
+    spacing:                     10px;
+    padding:                     14px;
+    border:                      1px;
+    border-color:                @pm-border;
+    border-radius:               0px;
+    background-color:            @pm-bg;
+    text-color:                  @pm-fg;
+    children:                    [ "textbox-prompt-colon", "entry" ];
+}
+textbox-prompt-colon {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "";
+    background-color:            transparent;
+    text-color:                  inherit;
+}
+entry {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  inherit;
+    cursor:                      text;
+    placeholder:                 "Search";
+    placeholder-color:           @dim;
+}
+
+/*****----- Mode Switcher -----*****/
+mode-switcher{
+    enabled:                     true;
+    spacing:                     20px;
+    padding:                     0px 0px 2px 0px;  /* keeps the button bottom border visible */
+    background-color:            transparent;
+    text-color:                  @foreground;
+}
+button {
+    padding:                     14px;
+    border:                      1px;
+    border-color:                @pm-border-inactive;
+    border-radius:               0px;
+    background-color:            @pm-bg;
+    text-color:                  @pm-fg;
+    cursor:                      pointer;
+}
+button selected {
+    border-color:                @pm-border;
+    background-color:            @pm-selected;
+    text-color:                  @pm-fg;
+}
+
+/*****----- Listview -----*****/
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       8;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   true;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+    
+    spacing:                     10px;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    cursor:                      "default";
+}
+
+/*****----- Scrollbar -----*****/
+scrollbar {
+    handle-width:                4px;
+    handle-color:                @dim;
+    border-radius:               0px;
+    background-color:            @background-alt;
+}
+
+/*****----- Elements -----*****/
+element {
+    enabled:                     true;
+    spacing:                     15px;
+    padding:                     8px;
+    border-radius:               0px;
+    background-color:            transparent;
+    text-color:                  @foreground;
+    cursor:                      pointer;
+}
+element normal.normal {
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+element normal.urgent {
+    background-color:            @urgent;
+    text-color:                  @foreground;
+}
+element normal.active {
+    background-color:            @active;
+    text-color:                  @foreground;
+}
+element selected.normal {
+    background-color:            @selected;
+    text-color:                  @selected-text;
+}
+element selected.urgent {
+    background-color:            @urgent;
+    text-color:                  @selected-text;
+}
+element selected.active {
+    background-color:            @urgent;
+    text-color:                  @selected-text;
+}
+element-icon {
+    background-color:            transparent;
+    text-color:                  inherit;
+    size:                        32px;
+    cursor:                      inherit;
+}
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+}
+
+/*****----- Message -----*****/
+message {
+    background-color:            transparent;
+}
+textbox {
+    padding:                     15px;
+    border-radius:               0px;
+    background-color:            @background-alt;
+    text-color:                  @foreground;
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+}
+error-message {
+    padding:                     15px;
+    border-radius:               0px;
+    background-color:            @background;
+    text-color:                  @foreground;
+}

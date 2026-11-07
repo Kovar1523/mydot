@@ -1,0 +1,162 @@
+/* textfox config: wal palette + white accent */
+:root {
+  --tf-font-family: "D2KodingLigature Nerd Font", monospace;
+  --tf-font-size: 14px;
+  --tf-bg: #0c161d;      /* wal background */
+  --tf-border: #6c7984;  /* wal color8 */
+  --tf-accent: #ECEFF4;  /* white accent */
+  --tf-display-horizontal-tabs: block;  /* 가로 탭 표시 */
+  --tf-bookmarks-alignment: left;       /* 창이 좁아져도 북마크 왼쪽이 잘리지 않도록 */
+  --tf-display-nav-buttons: flex;       /* 이전/다음 버튼 표시 */
+}
+
+/* 여기부터는 브라우저 자체 화면(chrome://)에만 적용
+ * userContent.css 도 이 파일을 불러오므로, 감싸지 않으면 웹사이트(main 안쪽)의 배경·색까지 바뀜
+ * 위의 --tf-* 변수만 웹 쪽(textfox 새 탭·홈)에서 쓰도록 바깥에 둠 */
+@-moz-document url-prefix("chrome://") {
+
+/* Theme colors from the wal palette
+ * Firefox 159 변수 이름과 textfox가 읽는 예전 이름(--toolbar-bgcolor, --toolbar-field-color)을 함께 지정 */
+:root {
+  --lwt-accent-color: #0c161d !important;
+  --lwt-accent-color-inactive: #0c161d !important;
+  --lwt-text-color: #c2c4c6 !important;
+  --lwt-header-image: none !important;
+  --lwt-additional-images: none !important;
+
+  /* 툴바 */
+  --toolbar-bgcolor: #0c161d !important;
+  --toolbar-background-color: #0c161d !important;
+  --toolbar-text-color: #c2c4c6 !important;
+  --toolbarbutton-icon-fill: #c2c4c6 !important;
+
+  /* 주소창 (검은 글자로 보이던 부분) */
+  --toolbar-field-color: #c2c4c6 !important;
+  --toolbar-field-text-color: #c2c4c6 !important;
+  --toolbar-field-text-color-focus: #c2c4c6 !important;
+  --toolbar-field-background-color-focus: #0c161d !important;
+  --toolbar-field-border-color: #6c7984 !important;
+  --toolbar-field-border-color-focus: #ECEFF4 !important;
+  --lwt-toolbar-field-highlight: #ECEFF4 !important;       /* 선택한 글자 배경 */
+  --lwt-toolbar-field-highlight-text: #0c161d !important;
+
+  /* 메뉴·팝업·주소창 드롭다운 */
+  --panel-background-color: #0c161d !important;
+  --panel-text-color: #c2c4c6 !important;
+  --panel-border-color: #6c7984 !important;
+
+  /* 테마가 툴바를 '밝음'으로 판정해도 어두운 배경용 글자·아이콘을 쓰게 함 */
+  --toolbar-color-scheme: dark !important;
+}
+
+:root[lwtheme] :is(body, toolbar, panel) {
+  color-scheme: dark !important;
+}
+
+/* Selected text in the urlbar and search fields (default theme ignores --lwt-toolbar-field-highlight) */
+input::selection {
+  background-color: #ECEFF4 !important;
+  color: #0c161d !important;
+}
+
+/* Firefox 159: 탭 색 변수 이름이 바뀌어 선택 탭에 흰 배경·테두리가 생기는 것 방지 */
+.tabbrowser-tab {
+  --tab-background-color-selected: var(--tab-selected-bgcolor) !important;
+  --tab-background-color-hover: var(--tab-hover-background-color) !important;
+  --tab-border-color-selected: transparent !important;
+}
+
+/* 투명 효과 (picom + mozilla.widget.use-argb-visuals)
+ * 창 바탕(body)에만 wal background 반투명 한 겹을 칠하고 나머지 영역은 비워서 겹쳐 진해지지 않게 함
+ * 웹페이지 영역(.browserContainer)·주소창 드롭다운·메뉴는 textfox 그대로 불투명 */
+:root {
+  --tf-chrome-opacity: 0.3;  /* same as kitty and polybar */
+  --tf-chrome-bg: rgb(0 0 0 / var(--tf-chrome-opacity));  /* black, like kitty */
+  --tab-selected-bgcolor: rgb(194 196 198 / 0.08) !important;  /* foreground 8% */
+  --tab-hover-background-color: rgb(194 196 198 / 0.04) !important;
+}
+
+:root,
+#browser,
+#navigator-toolbox,
+#titlebar,
+#TabsToolbar,
+#nav-bar,
+#PersonalToolbar,
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels,
+#sidebar-main,
+#sidebar-box,
+#sidebar {
+  background: transparent !important;
+}
+
+/* 주소창 왼쪽 검색 엔진 버튼(G ▾)의 회색(#42414d) 상자 */
+.searchmode-switcher {
+  --button-background-color-muted: transparent !important;
+}
+
+body {
+  background-color: var(--tf-chrome-bg) !important;
+}
+
+/* TUI 제목: ┌─ navbar ───┐ 처럼 제목을 윗선 높이 한가운데에 두고 제목 폭만큼 윗선을 끊음
+ * 윗선은 테두리 대신 배경 그라디언트로 그림 (고정폭 글꼴이라 제목 폭 = 글자 수 × 1ch) */
+#TabsToolbar       { --tf-title-len: 4; }  /* tabs */
+#nav-bar           { --tf-title-len: 6; }  /* navbar */
+#PersonalToolbar   { --tf-title-len: 9; }  /* bookmarks */
+#tabbrowser-tabbox { --tf-title-len: 4; }  /* main */
+#sidebar-box       { --tf-title-len: 4; }  /* tool */
+.buttons-wrapper   { --tf-title-len: 5; }  /* tools */
+findbar            { --tf-title-len: 4; }  /* find */
+
+#TabsToolbar,
+#nav-bar,
+#PersonalToolbar,
+#tabbrowser-tabbox,
+#sidebar-box,
+.buttons-wrapper,
+findbar {
+  --tf-line: var(--tf-border);
+  --tf-title-start: 8px;  /* 왼쪽 모서리에서 제목 칸까지 */
+  --tf-title-end: calc(var(--tf-title-start) + var(--tf-title-len) * 1ch + 8px);
+  position: relative !important;
+  background: linear-gradient(to right,
+      var(--tf-line) 0 var(--tf-title-start),
+      transparent var(--tf-title-start) var(--tf-title-end),
+      var(--tf-line) var(--tf-title-end))
+    0 0 / 100% var(--tf-border-width) no-repeat border-box transparent !important;
+
+  &, &:hover, &:focus {
+    border-top-color: transparent !important;
+  }
+  &:hover, &:focus {
+    --tf-line: var(--tf-accent);
+  }
+  &::before {
+    color: #127ebb !important;  /* wal color3 blue */
+    position: absolute !important;
+    top: calc(var(--tf-border-width) / -2) !important;
+    left: calc(var(--tf-title-start) - var(--tf-border-width)) !important;
+    translate: 0 -50%;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    background-color: transparent !important;
+  }
+  &:hover::before, &:focus::before {
+    color: #128590 !important;  /* wal color4 */
+  }
+}
+
+/* 내용을 잘라내는 상자들: 윗선 위로 나온 제목 절반이 가려짐
+ * tools 상자·찾기 바는 잘라내기를 끄고, 북마크 바는 접기 애니메이션용 clip 을 두고 범위만 넓힘 */
+.buttons-wrapper,
+findbar {
+  overflow: visible !important;
+}
+
+#PersonalToolbar {
+  overflow-clip-margin: 12px;
+}
+
+}  /* @-moz-document url-prefix("chrome://") */

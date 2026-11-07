@@ -1,0 +1,4 @@
+/* 색은 pywal이 만듦: ~/.config/wal/templates/colors-rofi.rasi → ~/.cache/wal/colors-rofi.rasi (~/.config/wal/apply.sh)
+   Nord로 되돌리기: colors.rasi.before-wal 로 덮어쓰기 */
+
+@import "/home/kovar1523/.cache/wal/colors-rofi.rasi"

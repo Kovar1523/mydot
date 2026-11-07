@@ -1,0 +1,90 @@
+/* Hack theme base (adi1090x polybar-themes launcher.rasi) with wal colors on black 30% glass (like polybar).
+ * Used by emoji, clipcat, networkmenu, notifcenter and polkit. */
+
+configuration {
+	font:							"JetBrainsMono Nerd Font Mono, Pretendard 10.5";
+	show-icons:						false;
+	disable-history:				false;
+	hide-scrollbar:					true;
+}
+
+@import "colors.rasi"
+
+* {
+	glass:							@bgw;
+	background-color:				@al;
+	text-color:						@fg;
+}
+
+window {
+	transparency:					"real";
+	location:						center;
+	anchor:							center;
+	width:							450px;
+	background-color:				@glass;
+	border:							1px;
+	border-color:					@ac;
+	border-radius:					0px;
+}
+
+mainbox {
+	children:						[ inputbar, listview ];
+	spacing:						10px;
+	padding:						2px 10px 10px 10px;
+}
+
+inputbar {
+	children:						[ textbox-prompt-colon, entry ];
+	spacing:						0px;
+	expand:							false;
+	border:							0px 0px 1px 0px;
+	border-color:					@ac;
+}
+
+textbox-prompt-colon {
+	expand:							false;
+	padding:						10px;
+	text-color:						@ac;
+	str:							"";
+}
+
+prompt {
+	padding:						10px 10px 10px 0px;
+	text-color:						@ac;
+}
+
+entry {
+	expand:							true;
+	padding:						10px 10px 10px 0px;
+	text-color:						@ac;
+	placeholder:					"Search...";
+	placeholder-color:				@ac;
+	blink:							true;
+}
+
+listview {
+	columns:						1;
+	lines:							8;
+	spacing:						5px;
+	cycle:							true;
+	dynamic:						true;
+	scrollbar:						false;
+	layout:							vertical;
+}
+
+element {
+	orientation:					horizontal;
+	padding:						8px;
+	text-color:						@fg;
+}
+
+element-text {
+	background-color:				transparent;
+	text-color:						inherit;
+	vertical-align:					0.5;
+}
+
+element selected {
+	background-color:				@se;
+	text-color:						@fg;
+}

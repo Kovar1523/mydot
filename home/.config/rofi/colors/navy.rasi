@@ -1,0 +1,10 @@
+/* Powermenu (dock) look: black 30% base like polybar, white 15% / 25% components, Nord text */
+* {
+    background:     #0000004D;
+    background-alt: #FFFFFF26;
+    foreground:     #D8DEE9FF;
+    selected:       #FFFFFF40;
+    active:         #FFFFFF26;
+    urgent:         #BF616AFF;
+    border:         #ECEFF4FF;
+}

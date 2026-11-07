@@ -1,0 +1,108 @@
+# eza Nord 테마. 파일 종류 색은 yazi theme.toml [filetype] 과 동일하게 맞춤
+# nord0 #2E3440  nord3 #4C566A  nord4 #D8DEE9  nord6 #ECEFF4
+# nord7 #8FBCBB  nord8 #88C0D0  nord9 #81A1C1  nord10 #5E81AC
+# nord11 #BF616A nord12 #D08770 nord13 #EBCB8B nord14 #A3BE8C nord15 #B48EAD
+# muted #4C566A (polybar 구분자·yazi 보조 텍스트와 동일)
+
+colourful: true
+
+filekinds:
+  normal: {foreground: "#D8DEE9"}
+  directory: {foreground: "#88C0D0", is_bold: true}
+  symlink: {foreground: "#81A1C1"}
+  pipe: {foreground: "#B48EAD"}
+  block_device: {foreground: "#EBCB8B", is_bold: true}
+  char_device: {foreground: "#EBCB8B"}
+  socket: {foreground: "#B48EAD", is_bold: true}
+  special: {foreground: "#D08770"}
+  executable: {foreground: "#A3BE8C", is_bold: true}
+  mount_point: {foreground: "#8FBCBB", is_bold: true, is_underline: true}
+
+perms:
+  user_read: {foreground: "#EBCB8B"}
+  user_write: {foreground: "#D08770"}
+  user_execute_file: {foreground: "#A3BE8C", is_bold: true}
+  user_execute_other: {foreground: "#A3BE8C"}
+  group_read: {foreground: "#EBCB8B", is_dimmed: true}
+  group_write: {foreground: "#D08770", is_dimmed: true}
+  group_execute: {foreground: "#A3BE8C", is_dimmed: true}
+  other_read: {foreground: "#4C566A"}
+  other_write: {foreground: "#4C566A"}
+  other_execute: {foreground: "#4C566A"}
+  special_user_file: {foreground: "#B48EAD"}
+  special_other: {foreground: "#B48EAD"}
+  attribute: {foreground: "#4C566A"}
+
+size:
+  major: {foreground: "#81A1C1"}
+  minor: {foreground: "#81A1C1"}
+  number_byte: {foreground: "#D8DEE9"}
+  number_kilo: {foreground: "#8FBCBB"}
+  number_mega: {foreground: "#88C0D0"}
+  number_giga: {foreground: "#81A1C1"}
+  number_huge: {foreground: "#B48EAD"}
+  unit_byte: {foreground: "#4C566A"}
+  unit_kilo: {foreground: "#4C566A"}
+  unit_mega: {foreground: "#4C566A"}
+  unit_giga: {foreground: "#4C566A"}
+  unit_huge: {foreground: "#4C566A"}
+
+users:
+  user_you: {foreground: "#88C0D0"}
+  user_root: {foreground: "#BF616A", is_bold: true}
+  user_other: {foreground: "#D08770"}
+  group_yours: {foreground: "#81A1C1"}
+  group_root: {foreground: "#BF616A"}
+  group_other: {foreground: "#D08770"}
+
+links:
+  normal: {foreground: "#81A1C1"}
+  multi_link_file: {foreground: "#D08770", is_bold: true}
+
+git:
+  new: {foreground: "#A3BE8C"}
+  modified: {foreground: "#EBCB8B"}
+  deleted: {foreground: "#BF616A"}
+  renamed: {foreground: "#81A1C1"}
+  typechange: {foreground: "#B48EAD"}
+  ignored: {foreground: "#4C566A"}
+  conflicted: {foreground: "#BF616A", is_bold: true}
+
+git_repo:
+  branch_main: {foreground: "#A3BE8C"}
+  branch_other: {foreground: "#B48EAD"}
+  git_clean: {foreground: "#A3BE8C"}
+  git_dirty: {foreground: "#EBCB8B"}
+
+security_context:
+  colon: {foreground: "#4C566A"}
+  user: {foreground: "#81A1C1"}
+  role: {foreground: "#B48EAD"}
+  typ: {foreground: "#8FBCBB"}
+  range: {foreground: "#D08770"}
+
+file_type:
+  image: {foreground: "#EBCB8B"}
+  video: {foreground: "#B48EAD"}
+  music: {foreground: "#B48EAD"}
+  lossless: {foreground: "#B48EAD", is_bold: true}
+  crypto: {foreground: "#A3BE8C", is_bold: true}
+  document: {foreground: "#8FBCBB"}
+  compressed: {foreground: "#D08770"}
+  temp: {foreground: "#4C566A"}
+  compiled: {foreground: "#5E81AC"}
+  build: {foreground: "#EBCB8B", is_underline: true}
+  source: {foreground: "#81A1C1"}
+
+punctuation: {foreground: "#4C566A"}
+date: {foreground: "#81A1C1"}
+inode: {foreground: "#4C566A"}
+blocks: {foreground: "#4C566A"}
+header: {foreground: "#ECEFF4", is_underline: true}
+octal: {foreground: "#8FBCBB"}
+flags: {foreground: "#B48EAD"}
+
+symlink_path: {foreground: "#81A1C1"}
+control_char: {foreground: "#BF616A"}
+broken_symlink: {foreground: "#BF616A"}
+broken_path_overlay: {foreground: "#BF616A", is_underline: true}

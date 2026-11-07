@@ -1,0 +1,39 @@
+/* networkmanager_dmenu via scripts/nmdm/rofi, Hack style (upstream networkmenu.rasi).
+ * Row width 360px = 45 cells of 8px; the wrapper sets lines and tab-stops from this. */
+
+@import "hack.rasi"
+
+window {
+	width:							400px;
+}
+
+inputbar {
+	children:						[ textbox-prompt-colon, prompt ];
+}
+
+textbox-prompt-colon {
+	str:							"󰖩";
+}
+
+element-text {
+	tab-stops:						[ 24px, 264px ];
+}
+
+/* connected network */
+element normal.active,
+element alternate.active {
+	text-color:						@ac;
+}
+
+element selected.active {
+	background-color:				@se;
+	text-color:						@ac;
+}
+
+/* section labels and notes (non-selectable rows) */
+element normal.urgent,
+element alternate.urgent,
+element selected.urgent {
+	background-color:				@al;
+	text-color:						@sp;
+}
