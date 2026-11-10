@@ -3,10 +3,8 @@ cmd-polkit-git
 eww
 gotop-bin
 minecraft-launcher
-nordic-theme
 notion-app-electron
 python-pywal16
 ttf-pretendard
 xdg-desktop-portal-termfilechooser
-xwinwrap-git
 yay-bin

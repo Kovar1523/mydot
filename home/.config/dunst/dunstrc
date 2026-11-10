@@ -5,15 +5,13 @@
     monitor = 0
     follow = mouse
 
-    # 오른쪽 위, miniblocks 오른쪽 블록 바로 아래 (2026-11-02, 이전: 바가 아래일 때 (24, 24))
-    # x 12 = 블록 오른쪽 끝(1908)과 맞춤
-    # y 74 = dwm 창 위쪽 테두리(62)보다 gappx 12만큼 아래 (11-04: 62는 kitty 위쪽 끝과 높이가 같아 겹쳐 보였음, 그 전 54는 바와 5px만 떨어짐)
-    # 11-04: 배율 1 고정. 자동(0)이면 재로그인 때 xrdb(Xft.dpi 96)보다 먼저 뜰 경우 모니터 DPI로 1.5배가 됨
+    # Flush with the top-right outer corner of dwm windows (border at x 1907, y 63)
+    # Fixed scale: auto may pick monitor DPI (1.5x) if dunst starts before xrdb
     scale = 1
     width = 360
     height = (0, 300)
     origin = top-right
-    offset = (12, 62)
+    offset = (12, 63)
     notification_limit = 5
     gap_size = 0
 

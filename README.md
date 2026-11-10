@@ -1,6 +1,6 @@
 # dotfiles
 
-Arch Linux · X11 · dwm · ASUS FA608UM (AMD 780M + NVIDIA) 환경 스냅샷 (2026-11-07).
+Arch Linux · X11 · dwm · ASUS FA608UM (AMD 780M + NVIDIA) 환경 스냅샷 (2026-11-10).
 
 ## 구성
 
@@ -9,12 +9,10 @@ Arch Linux · X11 · dwm · ASUS FA608UM (AMD 780M + NVIDIA) 환경 스냅샷 (2
 | `home/` | 사용자 설정 | `~/` 그대로 (예: `home/.config/kitty` → `~/.config/kitty`) |
 | `dwm/` | 패치된 dwm 소스 (`config.h` 포함) | `~/dwm` |
 | `dwm-patches/local.diff` | upstream `bca7cf2` 대비 현재 수정 전체 | |
-| `dwm-patches/tag-unmap.diff` | tag-unmap worktree 버전 (설치 전) | `~/dwm/.claude/worktrees/tag-unmap` |
 | `system/` | root 권한 파일 | `/` 기준 (예: `system/etc/asusd` → `/etc/asusd`) |
 | `system/boot-staged/` | Limine/콘솔 폰트 준비본 (아직 미적용) | `~/bootfont` |
 | `packages/pacman.txt` | 공식 저장소 명시 설치 패키지 | `pacman -Qqen` |
 | `packages/aur.txt` | AUR 패키지 | `pacman -Qqem` |
-| `packages/pipx.txt` | pipx 패키지 | `pipx list --short` |
 
 ## 주요 구성 요소
 
@@ -22,19 +20,18 @@ Arch Linux · X11 · dwm · ASUS FA608UM (AMD 780M + NVIDIA) 환경 스냅샷 (2
 - 바: polybar `miniblocks` (`~/.config/polybar/miniblocks`)
 - 컴포지터: picom (raven2cz 기반)
 - 런처/메뉴: rofi (adi1090x launcher, Dock powermenu, Hack 메뉴)
-- 알림/OSD: dunst, eww
+- 알림/OSD: dunst, eww (OSD + 알림 센터 `notifcenter.yuck`)
 - 터미널: kitty (JetBrainsMono Nerd Font Mono + Pretendard)
 - 색상: pywal16 (`~/.config/wal/apply.sh` + templates)
 - 입력기: fcitx5-hangul
-- 배경: xwinwrap + mpv (`usercustom/aurora-2240x1400.mp4`)
+- 배경: xwinwrap (AUR `xwinwrap-git`) + mpv (`usercustom/wavy-grass-moewalls-com.mp4`, 옵션은 `mpv.conf`의 `[wallpaper]` 프로필)
 
 ## 색상 팔레트
 
-pywal16이 `home/Downloads/aurora-wallpaper.png`에서 뽑은 팔레트입니다.
+pywal16이 `home/Downloads/aurora-wallpaper.png`에서 뽑은 팔레트입니다. 원본 이미지는 `~/Downloads`에서 지워져 이 저장소에만 남아 있습니다.
 
 - 생성된 결과: `home/.cache/wal/` (`colors.json`, `sequences`, `colors-tty.sh`, `dunst.conf`, `colors-rofi.rasi`, `colors-polybar.ini`, `btopwal.theme` 등)
 - 템플릿과 적용 스크립트: `home/.config/wal/` (`apply.sh`, `templates/`, `colorschemes/dark/nord.json`)
-- tty 팔레트: `system/etc/issue` (`\e]P` escape)
 
 | 키 | 값 |
 |---|---|
@@ -48,7 +45,7 @@ pywal16이 `home/Downloads/aurora-wallpaper.png`에서 뽑은 팔레트입니다
 | color6 / 14 | `#0e7dc5` |
 | color8 | `#6c7984` |
 
-다시 생성하려면 `wal -i ~/Downloads/aurora-wallpaper.png` 후 `~/.config/wal/apply.sh`.
+다시 생성하려면 이미지를 `~/Downloads`에 복사한 뒤 `wal -i ~/Downloads/aurora-wallpaper.png`, 이어서 `~/.config/wal/apply.sh`.
 
 ## 셸
 

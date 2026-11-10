@@ -384,3 +384,10 @@ keymap = [
 	{ on = "<C-p>", run = "arrow prev", desc = "이전 줄" },
 	{ on = "<C-n>", run = "arrow next", desc = "다음 줄" },
 ]
+
+
+
+[[mgr.prepend_keymap]]
+on = ["c", "a", "a"]
+run = "plugin compress"
+desc = "선택 파일 압축"

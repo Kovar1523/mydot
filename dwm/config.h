@@ -87,6 +87,8 @@ static const char *emojicmd[] = { "rofi", "-no-config", "-no-lazy-grab", "-show"
 static const char *powermenucmd[] = { "/home/kovar1523/.config/rofi/powermenu/dock/powermenu.sh", NULL };
 /* Copilot key: rofi quicklinks */
 static const char *quicklinkscmd[] = { "/home/kovar1523/.config/rofi/applets/menu/quicklinks.sh", NULL };
+/* Super+n: rofi network menu */
+static const char *networkcmd[] = { "networkmanager_dmenu", NULL };
 /* Super tap: rofi app launcher */
 static const char *launchercmd[] = { "rofi", "-no-config", "-no-lazy-grab", "-show", "drun",
 	"-theme", "/home/kovar1523/.config/rofi/launchers/type-6/style-6.rasi", NULL };
@@ -115,6 +117,7 @@ static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_o,      togglemenu,     {.v = emojicmd } },
+	{ MODKEY,                       XK_n,      togglemenu,     {.v = networkcmd } },
 	{ MODKEY|ShiftMask,             XF86XK_TouchpadOff, NULL,  {0} }, /* Copilot key: grab only, handled by menukeys */
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = firefoxcmd } },

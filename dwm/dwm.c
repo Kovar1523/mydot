@@ -49,11 +49,14 @@
 
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
+#define CLIENTMASK              (EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask)
+#define ROOTMASK                (SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|PointerMotionMask \
+                               |EnterWindowMask|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->mx+(m)->mw) - MAX((x),(m)->mx)) \
                                * MAX(0, MIN((y)+(h),(m)->my+(m)->mh) - MAX((y),(m)->my)))
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
-#define ISTAGHIDDEN(C)          ((C)->taghidden == TagHidden || (C)->taghidden == TagHiddenLeft || (C)->taghidden == TagHiddenRight)
+#define ISTAGHIDDEN(C)          ((C)->taghidden == TagHidden || (C)->taghidden == TagHiddenLeft || (C)->taghidden == TagHiddenRight || (C)->taghidden == TagSent)
 #define ISTAGSHOWN(C)           ((C)->taghidden == TagShown || (C)->taghidden == TagShownLeft || (C)->taghidden == TagShownRight)
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
@@ -66,8 +69,9 @@
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel }; /* color schemes */
 enum { TagHideNone, TagHidden, TagShown,
-       TagHiddenLeft, TagHiddenRight, TagShownLeft, TagShownRight }; /* _DWM_TAGHIDE 값 (picom 애니메이션용), Left/Right는 창이 움직이는 방향 */
-enum { SlideNone, SlideLeft, SlideRight }; /* 태그 전환 때 화면이 움직이는 방향 */
+       TagHiddenLeft, TagHiddenRight, TagShownLeft, TagShownRight,
+       TagSent }; /* _DWM_TAGHIDE 값 (picom 애니메이션용), Left/Right는 창이 움직이는 방향 */
+enum { SlideNone, SlideLeft, SlideRight, SlideFade }; /* 태그 전환 때 화면이 움직이는 방향 */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetWMWindowTypeDesktop, NetClientList, NetDesktopNames, NetDesktopViewport, NetNumberOfDesktops, NetCurrentDesktop, NetWMDesktop, NetLast }; /* EWMH atoms */
@@ -102,6 +106,7 @@ struct Client {
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
 	int taghidden; /* _DWM_TAGHIDE 값: TagHideNone 없음, TagHidden* 태그 전환으로 숨겨짐, TagShown* 태그 전환으로 다시 보임 */
+	int isunmapped; /* unmapped by showhide() for a hidden tag */
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -195,6 +200,7 @@ static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
+static void mapclient(Client *c);
 static void managealtbar(Window win, XWindowAttributes *wa);
 static void mapnotify(XEvent *e);
 static void mappingnotify(XEvent *e);
@@ -234,6 +240,7 @@ static void setviewport(void);
 static void seturgent(Client *c, int urg);
 static void settaghide(Client *c, int state);
 static void showhide(Client *c);
+static void unmapclient(Client *c);
 static void spawn(const Arg *arg);
 static pid_t spawnpid(const Arg *arg);
 static void spawnbar();
@@ -1231,7 +1238,7 @@ manage(Window w, XWindowAttributes *wa)
 	updatewindowtype(c);
 	updatesizehints(c);
 	updatewmhints(c);
-	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
+	XSelectInput(dpy, w, CLIENTMASK);
 	grabbuttons(c, 0);
 	if (!c->isfloating)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
@@ -1247,9 +1254,24 @@ manage(Window w, XWindowAttributes *wa)
 		unfocus(selmon->sel, 0);
 	c->mon->sel = c;
 	arrange(c->mon);
-	XMapWindow(dpy, c->win);
+	if (!c->isunmapped) /* opened on a hidden tag: stays unmapped until shown */
+		XMapWindow(dpy, c->win);
 	focus(NULL);
 	updateclientlist();
+}
+
+/* Counterpart of unmapclient(). The selected client is focused again here,
+ * because view() and tag() call focus() before arrange() maps it. */
+void
+mapclient(Client *c)
+{
+	if (!c->isunmapped)
+		return;
+	c->isunmapped = 0;
+	setclientstate(c, NormalState);
+	XMapWindow(dpy, c->win);
+	if (c == selmon->sel)
+		setfocus(c);
 }
 
 void
@@ -1905,9 +1927,7 @@ setup(void)
 	XDeleteProperty(dpy, root, netatom[NetClientList]);
 	/* select events */
 	wa.cursor = cursor[CurNormal]->cursor;
-	wa.event_mask = SubstructureRedirectMask|SubstructureNotifyMask
-		|ButtonPressMask|PointerMotionMask|EnterWindowMask
-		|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask;
+	wa.event_mask = ROOTMASK;
 	XChangeWindowAttributes(dpy, root, CWEventMask|CWCursor, &wa);
 	XSelectInput(dpy, root, wa.event_mask);
 	grabkeys();
@@ -1991,8 +2011,8 @@ showhide(Client *c)
 		return;
 	if (ISVISIBLE(c)) {
 		/* show clients top down */
-		/* 화면 밖에서 돌아올 때는 표시를 달아 picom이 날아오는 대신 slidedir 방향으로 밀려 들어오게
-		 * (방향이 없으면 제자리에서 튀어나오게) 하고, 그다음 arrange부터는 표시를 지워 일반 geometry 애니메이션을 씀 */
+		/* mark before mapping so picom's show animation knows the slide direction;
+		 * the next arrange clears it and normal geometry animations apply again */
 		if (ISTAGHIDDEN(c))
 			settaghide(c, slidedir == SlideLeft ? TagShownLeft
 				: slidedir == SlideRight ? TagShownRight : TagShown);
@@ -2001,17 +2021,38 @@ showhide(Client *c)
 		XMoveWindow(dpy, c->win, c->x, c->y);
 		if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
 			resize(c, c->x, c->y, c->w, c->h, 0);
+		mapclient(c);
 		showhide(c->snext);
 	} else {
 		/* hide clients bottom up */
 		showhide(c->snext);
-		/* 화면 밖으로 옮기기 전에 표시를 달아 picom이 날아가는 대신 slidedir 방향으로 밀려 나가게
-		 * (방향이 없으면 제자리에서 사라지게) 함. 실제 숨김 위치는 어느 모니터에도 걸치지 않는 기존 -2 * 너비 그대로 */
+		/* mark before unmapping so picom's hide animation knows the slide direction */
 		if (!ISTAGHIDDEN(c))
 			settaghide(c, slidedir == SlideLeft ? TagHiddenLeft
-				: slidedir == SlideRight ? TagHiddenRight : TagHidden);
-		XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y);
+				: slidedir == SlideRight ? TagHiddenRight
+				: slidedir == SlideFade ? TagSent : TagHidden);
+		unmapclient(c);
 	}
+}
+
+/* Hide by unmapping in place instead of moving offscreen: picom never paints a
+ * window whose real geometry is offscreen, so it could not animate the hide.
+ * Both notify masks are dropped under a server grab so dwm never receives this
+ * UnmapNotify (it would unmanage the client otherwise). */
+void
+unmapclient(Client *c)
+{
+	if (c->isunmapped)
+		return;
+	c->isunmapped = 1;
+	XGrabServer(dpy);
+	XSelectInput(dpy, root, ROOTMASK & ~SubstructureNotifyMask);
+	XSelectInput(dpy, c->win, CLIENTMASK & ~StructureNotifyMask);
+	XUnmapWindow(dpy, c->win);
+	XSelectInput(dpy, c->win, CLIENTMASK);
+	XSelectInput(dpy, root, ROOTMASK);
+	XUngrabServer(dpy);
+	setclientstate(c, IconicState);
 }
 
 void
@@ -2059,15 +2100,25 @@ spawnbar()
 void
 tag(const Arg *arg)
 {
-	if (selmon->sel && arg->ui & TAGMASK) {
-		/* 보내는 창은 대상 태그 쪽으로 밀려남: 대상이 오른쪽(번호가 큼)이면 오른쪽으로.
-		 * 화면이 아니라 창이 움직이므로 view()와 반대로 대상→현재 순서로 방향을 구함 */
-		slidedir = getslidedir(arg->ui & TAGMASK, selmon->tagset[selmon->seltags]);
-		selmon->sel->tags = arg->ui & TAGMASK;
+	Client *c = selmon->sel;
+	XWindowChanges wc;
+
+	if (c && arg->ui & TAGMASK) {
+		/* the sent client fades out in place */
+		slidedir = SlideFade;
+		c->tags = arg->ui & TAGMASK;
 		/* 숨겨지는 창의 _DWM_TAGHIDE 표시는 arrange()의 showhide()가 처리 */
 		focus(NULL);
 		arrange(selmon);
 		slidedir = SlideNone;
+		/* restack() put the remaining clients above it; keep the fading
+		 * client on top so they do not cover the fade while relayouting */
+		if (c->taghidden == TagSent) {
+			wc.stack_mode = Below;
+			wc.sibling = selmon->barwin;
+			XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
+			XSync(dpy, False);
+		}
 	}
 	updateclientlist();
 }
@@ -2281,7 +2332,8 @@ unmapnotify(XEvent *e)
 	XUnmapEvent *ev = &e->xunmap;
 
 	if ((c = wintoclient(ev->window))) {
-		if (ev->send_event)
+		/* a hidden client that withdraws only sends the synthetic event */
+		if (ev->send_event && !c->isunmapped)
 			setclientstate(c, WithdrawnState);
 		else
 			unmanage(c, 0);

@@ -1,0 +1,82 @@
+;; Notification center (polybar bell), data and actions: ~/.config/polybar/miniblocks/scripts/notif-center.py
+;; Left click on a card expands it, right click slides it left and shows pin / delete / copy.
+;; Opened at the old rofi spot: top right, 12px from the edge, 63px from the top.
+
+(defvar nc '{"groups":[],"count":0,"clearn":0,"status":"","paused":false,"empty":true,"scroll":false}')
+(defvar nc_exp "")         ; key of the expanded card
+(defvar nc_opt "")         ; key of the card showing its options
+(defvar nc_confirm false)  ; clear asked once
+
+(defwidget nc-opt [icon text cmd]
+  (eventbox :cursor "pointer" :timeout "3s" :onclick cmd
+    (box :class "nc-opt"
+      (box :orientation "v" :space-evenly false :valign "center" :hexpand true
+        (label :class "nc-opt-icon" :text icon)
+        (label :class "nc-opt-text" :text text)))))
+
+(defwidget nc-card [n]
+  (box :class "nc-row" :space-evenly false
+    (eventbox :class "nc-hit" :hexpand true :cursor "pointer"
+      :onclick "eww update nc_opt= nc_exp=${nc_exp == n.k ? '' : n.k}"
+      :onrightclick "eww update nc_opt=${nc_opt == n.k ? '' : n.k}"
+      (box :class {n.urgent ? "nc-card urgent" : "nc-card"} :space-evenly false :spacing 12
+        (image :class "nc-app" :path {n.icon} :image-width 32 :image-height 32 :valign "start")
+        (box :orientation "v" :space-evenly false :hexpand true
+          (box :space-evenly false :spacing 16
+            (label :class "nc-title" :xalign 0 :hexpand true :text {nc_exp == n.k ? n.title1 : n.title})
+            (label :class "nc-time" :valign "start" :text {n.time}))
+          (revealer :reveal {nc_exp != n.k} :transition "slideup" :duration "200ms"
+            (label :class {n.dim ? "nc-body dim" : "nc-body"} :xalign 0 :truncate true :text {n.short}))
+          (revealer :reveal {nc_exp == n.k} :transition "slidedown" :duration "200ms"
+            (box :orientation "v" :space-evenly false
+              ;; rest of the title when the title row can't hold it
+              (for line in {n.head}
+                (label :class "nc-title full" :xalign 0 :text line))
+              (for line in {n.lines}
+                (label :class "nc-body full" :xalign 0 :text line))
+              (label :class "nc-meta" :xalign 0 :truncate true :text {n.meta}))))))
+    (revealer :reveal {nc_opt == n.k} :transition "slideleft" :duration "200ms"
+      (box :class "nc-opts" :space-evenly true :spacing 6
+        (nc-opt :icon {n.pinned ? "󰐄" : "󰐃"} :text {n.pinned ? "해제" : "고정"}
+          :cmd "~/.config/polybar/miniblocks/scripts/notif-center.py pin ${n.k}")
+        (nc-opt :icon "󰆴" :text "삭제"
+          :cmd "~/.config/polybar/miniblocks/scripts/notif-center.py delete ${n.k}")
+        (nc-opt :icon "󰆏" :text "복사"
+          :cmd "~/.config/polybar/miniblocks/scripts/notif-center.py copy ${n.k}")))))
+
+(defwidget nc-list []
+  (box :class "nc-list" :orientation "v" :space-evenly false :spacing 6
+    (for g in {nc.groups}
+      (box :orientation "v" :space-evenly false :spacing 6
+        (label :class "nc-day" :xalign 0 :text {g.label})
+        (for n in {g.items}
+          (nc-card :n n))))))
+
+(defwindow notifcenter
+  :monitor 0
+  :geometry (geometry :x "-12px" :y "63px" :width "584px" :height "60px" :anchor "top right")
+  :stacking "fg"
+  :wm-ignore true
+  :resizable false
+  ;; non-resizable = the window follows the content height; the horizontal scroll keeps long
+  ;; labels from widening it past 584px (they ellipsize instead)
+  (scroll :hscroll true :vscroll false
+  (box :class "nc" :orientation "v" :space-evenly false
+    (box :class "nc-header" :space-evenly false
+      (label :class "nc-name" :xalign 0 :hexpand true :text "알림")
+      (label :class {nc_confirm ? "nc-status crit" : "nc-status"}
+        :text {nc_confirm ? "${nc.clearn}개를 모두 지울까요? 한 번 더 누르세요" : nc.status})
+      (eventbox :cursor "pointer" :timeout "3s"
+        :onclick {nc.clearn == 0 ? "" : nc_confirm ? "~/.config/polybar/miniblocks/scripts/notif-center.py clear" : "eww update nc_confirm=true"}
+        (label :class {nc_confirm ? "nc-btn crit" : "nc-btn"} :text "󰗩"))
+      (eventbox :cursor "pointer" :timeout "3s"
+        :onclick "~/.config/polybar/miniblocks/scripts/notif-center.py dnd"
+        (label :class {nc.paused ? "nc-btn on" : "nc-btn"} :text "󱏧")))
+    ;; short lists grow the window, long ones scroll (nc.scroll from the script)
+    (revealer :reveal {nc.empty} :transition "none"
+      (label :class "nc-empty" :text "알림 없음"))
+    (revealer :reveal {!nc.empty && !nc.scroll} :transition "none"
+      (nc-list))
+    (revealer :reveal {nc.scroll} :transition "none"
+      (scroll :class "nc-scroll" :vscroll true :hscroll false :height 700
+        (nc-list))))))

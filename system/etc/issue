@@ -1,4 +1,4 @@
-\e]P00c161d\e]P1bf616a\e]P20f9073\e]P3d08770\e]P4226eff\e]P51379d6\e]P6127ebb\e]P7c2c4c6\e]P86c7984\e]P9bf616a\e]Pa0f9073\e]Pbd08770\e]Pc226eff\e]Pd1379d6\e]Pe128590\e]Pfeceff4\e{white}
+\e{white}
 .____           .__ __            
 |    |   _____  |__|  | _______   
 |    |   \\__  \\ |  |  |/ /\\__  \\  
@@ -7,7 +7,7 @@
         \\/    \\/        \\/     \\/
 
 \e{reset}
-\e{darkgray}Today is\e{reset} \e{gray}\d\e{reset} \e{darkgray}@\e{reset} \e{white}\n\e{reset}
-\e{darkgray}------------------------------------------------------------\e{reset}
-\e{cyan}\S\e{reset}\e{darkgray};\e{reset} \e{gray}\r\e{reset} \e{darkgray}(\l),\e{reset} \e{gray}\m\e{reset}
+\e{gray}Today is\e{reset} \e{cyan}\d\e{reset} \e{blue}@\e{reset} \e{lightblue}\n\e{reset}
+\e{blue}------------------------------------------------------------\e{reset}
+\e{white}\S\e{reset}\e{blue};\e{reset} \e{cyan}\r\e{reset} \e{blue}(\l),\e{reset} \e{cyan}\m\e{reset}
 

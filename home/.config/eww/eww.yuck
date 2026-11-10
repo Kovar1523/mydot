@@ -35,3 +35,6 @@
         (seg :name "quiet" :icon "󰌪")
         (seg :name "balanced" :icon "")
         (seg :name "performance" :icon "")))))
+
+;; Notification center (polybar bell)
+(include "./notifcenter.yuck")

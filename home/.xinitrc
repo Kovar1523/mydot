@@ -24,8 +24,8 @@ if xrandr --query | grep -q '^DP-0 connected'; then
 fi
 
 fcitx5 -r -d &
-xwinwrap -fs -ov -b -nf -ni -- mpv -wid %WID --no-config --really-quiet --loop-file=inf --no-audio --no-osc --hwdec=vaapi,nvdec --vo=gpu --gpu-api=opengl --profile=fast --panscan=1.0 ~/usercustom/aurora-2240x1400.mp4 &
 PICOM_DEBUG=force_vblank_sched=present picom -b &
+xwinwrap -ovr -fdt -ni -- mpv -wid WID --panscan=1.0 ~/usercustom/wavy-grass-moewalls-com.mp4 &
 clipcatd &
 cmd-polkit-agent -s -c ~/.config/polybar/miniblocks/scripts/polkit-rofi.py &
 eww daemon &
